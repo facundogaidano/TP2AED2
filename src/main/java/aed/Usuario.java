@@ -7,7 +7,6 @@ package aed;
 public class Usuario implements Comparable<Usuario> {
     private int id;             // ID del usuario, indexado desde 1.
     private int balance;        // Saldo actual del usuario
-    private int heapIndex; // Índice en el heap para acceso O(1)
 
     /**
      * Constructor que inicializa un usuario con balance cero.
@@ -16,7 +15,7 @@ public class Usuario implements Comparable<Usuario> {
     public Usuario(int id) {
         this.id = id;
         this.balance = 0;
-        this.heapIndex = -1;
+        // this.heapIndex = -1;
     }
 
     /**
@@ -48,17 +47,17 @@ public class Usuario implements Comparable<Usuario> {
      * Evitamos el uso de un Handle con este sistema.
      * Complejidad: O(1)
      */
-    public void setHeapIndex(int index) {
-        this.heapIndex = index;
-    }
+    // public void setHeapIndex(int index) {
+    //     this.heapIndex = index;
+    // }
 
-    /**
-     * Devuelve el índice del usuario en el heap.
-     * Complejidad: O(1)
-     */
-    public int getHeapIndex() {
-        return this.heapIndex;
-    }
+    // /**
+    //  * Devuelve el índice del usuario en el heap.
+    //  * Complejidad: O(1)
+    //  */
+    // public int getHeapIndex() {
+    //     return this.heapIndex;
+    // }
 
     /**
      * Compara este usuario con otro para ordenamiento en el heap.

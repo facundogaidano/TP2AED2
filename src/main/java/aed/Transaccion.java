@@ -11,7 +11,6 @@ public class Transaccion implements Comparable<Transaccion> {
     private int id_comprador;
     private int id_vendedor;
     private int monto;
-    private int indexEnBloque = -1; // Índice en la lista de un bloque para acceso O(1)
 
     /**
      * Constructor para crear una nueva transacción.
@@ -75,13 +74,13 @@ public class Transaccion implements Comparable<Transaccion> {
         if (trx.id_comprador() != 0) {
             Usuario comprador = usuariosArray[trx.id_comprador()];
             comprador.agregarBalance(trx.monto()); // O(1)
+            heap.actualizarPosicionUsuario(comprador); // O(log P)
         }
         
         Usuario vendedor = usuariosArray[trx.id_vendedor()];
         vendedor.agregarBalance(-trx.monto()); // O(1)
+        heap.actualizarPosicionUsuario(vendedor); // O(log P)
         
-        if (trx.id_comprador() != 0) { heap.actualizarPosicionUsuario(usuariosArray[trx.id_comprador()]); }
-        heap.actualizarPosicionUsuario(usuariosArray[trx.id_vendedor()]); // O(log P)
     }
 
     /**
@@ -109,26 +108,17 @@ public class Transaccion implements Comparable<Transaccion> {
     public int id() { return id; }
 
     /**
-     * Establece el índice de la transacción dentro de un bloque.
-     * Complejidad: O(1)
-     */
-    public void setIndexEnBloque(int index) { this.indexEnBloque = index; }
-
-    /**
-     * Devuelve el índice de la transacción dentro de un bloque.
-     * Complejidad: O(1)
-     */
-    public int getIndexEnBloque() { return indexEnBloque; }
-
-    /**
      * Compara esta transacción con otra por monto y luego por ID.
      * Complejidad: O(1)
      */
     @Override
     public int compareTo(Transaccion otro) { // Asumo que no va a haber Overflow de Integer.
         if (this.monto != otro.monto) {
+            // Para un max heap, debe restar otro.monto - this.monto
+            // para priorizar montos mayores
             return this.monto - otro.monto;
         }
+        // En caso de empate por monto, el de menor ID es prioritario
         return this.id - otro.id;
     }
 

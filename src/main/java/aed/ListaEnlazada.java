@@ -67,6 +67,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         } else {
             ultNodo = actual.ant;
         }
+        listaHandle.remove(i);
         longLista = longLista - 1;
     }
 
@@ -82,12 +83,17 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         primNodo = null;
         ultNodo = null;
         longLista = 0;
+        listaHandle = new ArrayList<Nodo>();
 
         Nodo actual = lista.primNodo;
         while (actual != null) {
             agregarAtras(actual.valor);
             actual = actual.sig;
         }
+    }
+
+    public int obtenerCantidadHandles() {
+        return listaHandle.size();
     }
     
     @Override

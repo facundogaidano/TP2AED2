@@ -8,6 +8,8 @@ import java.util.ArrayList;
  */
 public class Heap<T extends Comparable<T>> {
     private ArrayList<T> heap; // Lista que almacena los elementos del heap
+    private ArrayList<Integer> listaHandle;
+
 
     /**
      * Constructor que inicializa un heap vacío con la capacidad especificada.
@@ -15,6 +17,11 @@ public class Heap<T extends Comparable<T>> {
      */
     public Heap(int capacidadInicial) {
         heap = new ArrayList<>(capacidadInicial);
+        listaHandle = new ArrayList<>();
+        // Initialize with enough capacity
+        for (int i = 0; i < capacidadInicial + 1; i++) {
+            listaHandle.add(-1);
+        }
     }
 
     /**
@@ -25,11 +32,23 @@ public class Heap<T extends Comparable<T>> {
      */
     public Heap(ArrayList<T> elementos) {
         this.heap = new ArrayList<>(elementos);
+        this.listaHandle = new ArrayList<>();
 
-        // Asignar índices a objetos Usuario para acceso O(1)
+        int maxId = 0;
+        for (T elemento : elementos) {
+            if (elemento instanceof Usuario) {
+                maxId = Math.max(maxId, ((Usuario)elemento).getId());
+            }
+        }
+
+        for (int i = 0; i <= maxId; i++) {
+            listaHandle.add(-1);
+        }
+
         for (int indice = 0; indice < heap.size(); indice++) {
             if (heap.get(indice) instanceof Usuario) {
-                ((Usuario)heap.get(indice)).setHeapIndex(indice);
+                Usuario u = (Usuario)heap.get(indice);
+                listaHandle.set(u.getId(), indice);
             }
         }
 
@@ -49,7 +68,9 @@ public class Heap<T extends Comparable<T>> {
 
         // Si es un Usuario, almacenar su posición para acceso - O(1)
         if (elemento instanceof Usuario) {
-            ((Usuario) elemento).setHeapIndex(indice);
+            Usuario u = (Usuario) elemento;
+            
+            listaHandle.set(u.getId(), indice);
         }
 
         heapifyUp(indice);
@@ -64,6 +85,11 @@ public class Heap<T extends Comparable<T>> {
             throw new IllegalStateException("Heap vacío");
         }
         T maxElem = heap.get(0);
+
+        if (maxElem instanceof Usuario) {
+            listaHandle.set(((Usuario)maxElem).getId(), -1); // Ya no está en el heap
+        }
+
         T ultimoElemento = heap.remove(heap.size() - 1);
 
         if (!heap.isEmpty()) {
@@ -71,16 +97,11 @@ public class Heap<T extends Comparable<T>> {
             
             // Actualizar índice si es Usuario.
             if (ultimoElemento instanceof Usuario) {
-                ((Usuario) ultimoElemento).setHeapIndex(0);
+                listaHandle.set(((Usuario) ultimoElemento).getId(), 0);
             }
             
             // Reorganizar el heap hacia abajo desde la raíz. - O(log n)
             heapifyDown(0);
-        }
-
-        // Marcar que el elemento ya no está en el heap.
-        if (maxElem instanceof Usuario) {
-            ((Usuario) maxElem).setHeapIndex(-1);
         }
         
         return maxElem;
@@ -108,10 +129,10 @@ public class Heap<T extends Comparable<T>> {
             
             // Actualizar índices si son Usuarios
             if (padre instanceof Usuario) {
-                ((Usuario) padre).setHeapIndex(indice);
+                listaHandle.set(((Usuario) padre).getId(), indice);
             }
             if (elemento instanceof Usuario) {
-                ((Usuario) elemento).setHeapIndex(indicePadre);
+                listaHandle.set(((Usuario) elemento).getId(), indicePadre);
             }
             
             indice = indicePadre;
@@ -155,10 +176,10 @@ public class Heap<T extends Comparable<T>> {
             
             // Actualizar índices si son Usuarios
             if (elemento instanceof Usuario) {
-                ((Usuario) elemento).setHeapIndex(idDelMasLargo);
+                listaHandle.set(((Usuario) elemento).getId(), idDelMasLargo);
             }
             if (masLargo instanceof Usuario) {
-                ((Usuario) masLargo).setHeapIndex(indice);
+                listaHandle.set(((Usuario) masLargo).getId(), indice);
             }
             
             indice = idDelMasLargo;
@@ -171,13 +192,20 @@ public class Heap<T extends Comparable<T>> {
      * Complejidad: O(log P)
      */
     public void actualizarPosicionUsuario(Usuario usuario) {
-        int indice = usuario.getHeapIndex();
-        if (indice >= 0 && indice < heap.size()) {
+        int id = usuario.getId();
+
+        while (listaHandle.size() <= id) {
+            listaHandle.add(-1);
+        }
+
+        int indice = listaHandle.get(id);
+        
+        if (indice >= 0 && indice < heap.size() && heap.get(indice) instanceof Usuario) {
             // Si el usuario está en el heap, reorganizar hacia arriba y abajo - O(log P)
             if (heap.get(indice) == usuario) {
                 heapifyUp(indice);
                 // Obtener nuevo índice después de heapifyUp
-                indice = usuario.getHeapIndex();
+                indice = listaHandle.get(id);
                 heapifyDown(indice);
             }
         }
@@ -198,8 +226,7 @@ public class Heap<T extends Comparable<T>> {
      */
     public int getLongitud() { return heap.size(); }
 
-// No hay necesidad de un Handle. Cada usuario tiene dentro un heapIndex que indica su posición en el heap.
-    /* public class Handle {
+    public class Handle {
         private int indice;
 
         public Handle(int indice) {
@@ -213,5 +240,5 @@ public class Heap<T extends Comparable<T>> {
         public void setIndice(int indice) {
             this.indice = indice;
         }
-    } */
+    }
 }

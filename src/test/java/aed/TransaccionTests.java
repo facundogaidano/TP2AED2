@@ -17,8 +17,8 @@ public class TransaccionTests {
     usuariosArray[2] = u2;
 
     Transaccion[] transacciones = {
-      new Transaccion(0, 0, 1, 10), // creación: suma 10 a u1
-      new Transaccion(1, 1, 2, 5)   // u1 paga 5 a u2
+      new Transaccion(0, 0, 1, 10),
+      new Transaccion(1, 1, 2, 5)
     };
 
     Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
@@ -26,7 +26,6 @@ public class TransaccionTests {
     assertEquals(5, u1.getBalance(), "u1 debería tener 5");
     assertEquals(5, u2.getBalance(), "u2 debería tener 5");
     
-    // Verificar que el heap mantiene el orden correcto
     assertEquals(u1, usuarios.getMaximo(), "u1 y u2 tienen el mismo balance, pero u1 tiene menor ID");
   }
   
@@ -43,10 +42,10 @@ public class TransaccionTests {
 
     // Múltiples transacciones entre los mismos usuarios
     Transaccion[] transacciones = {
-      new Transaccion(0, 0, 1, 100),  // creación: suma 100 a u1
-      new Transaccion(1, 1, 2, 30),   // u1 paga 30 a u2
-      new Transaccion(2, 1, 2, 20),   // u1 paga 20 a u2
-      new Transaccion(3, 2, 1, 15)    // u2 paga 15 a u1
+      new Transaccion(0, 0, 1, 100),
+      new Transaccion(1, 1, 2, 30),
+      new Transaccion(2, 1, 2, 20),
+      new Transaccion(3, 2, 1, 15)
     };
 
     Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
@@ -85,9 +84,9 @@ public class TransaccionTests {
     }
 
     Transaccion[] transacciones = {
-      new Transaccion(0, 0, 1, 10),  // creación para u1
-      new Transaccion(1, 0, 2, 20),  // creación para u2
-      new Transaccion(2, 0, 3, 30)   // creación para u3
+      new Transaccion(0, 0, 1, 10),
+      new Transaccion(1, 0, 2, 20),
+      new Transaccion(2, 0, 3, 30)
     };
 
     Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
@@ -126,9 +125,9 @@ public class TransaccionTests {
     Transaccion t1 = new Transaccion(0, 0, 1, 10);
     Transaccion t2 = new Transaccion(0, 0, 1, 10);
     Transaccion t3 = new Transaccion(1, 1, 2, 5);
-    Transaccion t4 = new Transaccion(0, 0, 2, 10); // Mismo ID pero diferente vendedor
-    Transaccion t5 = new Transaccion(0, 1, 1, 10); // Mismo ID pero diferente comprador
-    Transaccion t6 = new Transaccion(0, 0, 1, 15); // Mismo ID pero diferente monto
+    Transaccion t4 = new Transaccion(0, 0, 2, 10); 
+    Transaccion t5 = new Transaccion(0, 1, 1, 10);
+    Transaccion t6 = new Transaccion(0, 0, 1, 15);
 
     assertEquals(t1, t2, "t1 y t2 deberían ser iguales (mismos atributos)");
     assertNotEquals(t1, t3, "t1 y t3 deberían ser distintos (todos atributos diferentes)");
@@ -163,7 +162,6 @@ public class TransaccionTests {
     usuariosArray[2] = u2;
 
     Transaccion t = new Transaccion(1, 1, 2, 10);
-    // Aplica la transacción
     Transaccion[] arr = {t};
     Transaccion.aplicarTransacciones(usuarios, arr, usuariosArray);
 
@@ -171,7 +169,6 @@ public class TransaccionTests {
     assertEquals(10, u2.getBalance(), "u2 debería tener 10 después de cobrar");
     assertEquals(u2, usuarios.getMaximo(), "u2 debería ser el máximo");
 
-    // Revierte la transacción
     Transaccion.revertirTransaccion(usuarios, t, usuariosArray);
 
     assertEquals(0, u1.getBalance(), "u1 debería volver a 0 después de revertir");
@@ -193,8 +190,7 @@ public class TransaccionTests {
     usuariosArray[1] = u1;
     usuariosArray[2] = u2;
 
-    Transaccion t = new Transaccion(1, 0, 2, 10); // Creación para u2
-    // Aplica la transacción
+    Transaccion t = new Transaccion(1, 0, 2, 10);
     Transaccion[] arr = {t};
     Transaccion.aplicarTransacciones(usuarios, arr, usuariosArray);
 
@@ -202,26 +198,10 @@ public class TransaccionTests {
     assertEquals(10, u2.getBalance(), "u2 debería tener 10");
     assertEquals(u2, usuarios.getMaximo(), "u2 debería ser el máximo");
 
-    // Revierte la transacción
     Transaccion.revertirTransaccion(usuarios, t, usuariosArray);
 
     assertEquals(0, u1.getBalance(), "u1 debería seguir en 0");
     assertEquals(0, u2.getBalance(), "u2 debería volver a 0 después de revertir");
-  }
-  
-  @Test
-  void testIndexesEnBloque() {
-    Transaccion t = new Transaccion(1, 1, 2, 10);
-    assertEquals(-1, t.getIndexEnBloque(), "Inicialmente el índice debe ser -1");
-    
-    t.setIndexEnBloque(5);
-    assertEquals(5, t.getIndexEnBloque(), "El índice debe actualizarse a 5");
-    
-    t.setIndexEnBloque(0);
-    assertEquals(0, t.getIndexEnBloque(), "El índice debe actualizarse a 0");
-    
-    t.setIndexEnBloque(-1);
-    assertEquals(-1, t.getIndexEnBloque(), "El índice debe poder volver a -1");
   }
   
   @Test
@@ -249,39 +229,33 @@ public class TransaccionTests {
       for (int i = 0; i < n; i++) {
         transacciones[i] = new Transaccion(i, i % 10 + 1, ((i+1) % 10) + 1, i + 1);
       }
-      long start = System.currentTimeMillis();
+      long start = System.nanoTime();
       Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
-      long end = System.currentTimeMillis();
-      System.out.println("aplicarTransacciones() con " + n + " transacciones -> " + (end - start) + "ms");
+      long end = System.nanoTime();
+      System.out.println("aplicarTransacciones() con " + n + " transacciones -> " + (end - start) + "ns");
     }
   }
 
   @Test
   void testRevertirTransaccionEsOLogP() {
-    int[] casos = {10000};
-    for (int idx = 0; idx < casos.length; idx++) {
-      int[] usuariosSizes = {100, 1000, 10000, 100000};
+    int[] usuariosSizes = {1000, 10000, 100000, 1000000};
       
-      for (int p : usuariosSizes) {
-        Heap<Usuario> usuarios = new Heap<>(p + 1);
-        Usuario[] usuariosArray = new Usuario[p + 1];
-        for (int i = 1; i <= p; i++) {
-          usuariosArray[i] = new Usuario(i);
-          usuarios.agregarAlHeap(usuariosArray[i]);
-        }
-        Transaccion t = new Transaccion(1, 1, 2, 100);
-        Transaccion[] arr = {t};
-        Transaccion.aplicarTransacciones(usuarios, arr, usuariosArray);
-        
-        long start = System.nanoTime();
-        for (int i = 0; i < 1000; i++) { // Hacer 1000 reversiones para medición más precisa
-          Transaccion.revertirTransaccion(usuarios, t, usuariosArray);
-          Transaccion.aplicarTransacciones(usuarios, arr, usuariosArray);
-        }
-        long end = System.nanoTime();
-        System.out.printf("revertirTransaccion() con P=%d usuarios -> %.2f ns/op%n", 
-                          p, (end - start) / 1000.0);
+    for (int p : usuariosSizes) {
+      Heap<Usuario> usuarios = new Heap<>(p + 1);
+      Usuario[] usuariosArray = new Usuario[p + 1];
+      for (int i = 1; i <= p; i++) {
+        usuariosArray[i] = new Usuario(i);
+        usuarios.agregarAlHeap(usuariosArray[i]);
       }
+      Transaccion t = new Transaccion(1, 1, 2, 100);
+      Transaccion[] arr = {t};
+      Transaccion.aplicarTransacciones(usuarios, arr, usuariosArray);
+      
+      long start = System.nanoTime();
+      Transaccion.revertirTransaccion(usuarios, t, usuariosArray);
+      long end = System.nanoTime();
+      
+      System.out.println("revertirTransaccion() con " + p + " usuarios -> " + (end - start) + "ns");
     }
   }
   
@@ -296,31 +270,90 @@ public class TransaccionTests {
     usuariosArray[1] = u1;
     usuariosArray[2] = u2;
 
-    // Múltiples transacciones que afectan a los mismos usuarios
     Transaccion[] transacciones = {
-      new Transaccion(0, 1, 2, 10),   // u1 paga 10 a u2
-      new Transaccion(1, 1, 2, 20),   // u1 paga 20 a u2
-      new Transaccion(2, 1, 2, 30),   // u1 paga 30 a u2
+      new Transaccion(0, 1, 2, 10),
+      new Transaccion(1, 1, 2, 20),
+      new Transaccion(2, 1, 2, 30),
     };
 
-    // Custom implementation para contar actualizaciones
     final int[] actualizacionesHeap = {0};
     
-    // Crear un spy del heap para contar llamadas a actualizarPosicionUsuario
-    Heap<Usuario> spyHeap = new Heap<Usuario>(3) {
+    Heap<Usuario> contadorHeap = new Heap<Usuario>(3) {
       @Override
       public void actualizarPosicionUsuario(Usuario usuario) {
         actualizacionesHeap[0]++;
         super.actualizarPosicionUsuario(usuario);
       }
     };
-    spyHeap.agregarAlHeap(u1);
-    spyHeap.agregarAlHeap(u2);
+    contadorHeap.agregarAlHeap(u1);
+    contadorHeap.agregarAlHeap(u2);
     
-    Transaccion.aplicarTransacciones(spyHeap, transacciones, usuariosArray);
+    Transaccion.aplicarTransacciones(contadorHeap, transacciones, usuariosArray);
     
     assertEquals(2, actualizacionesHeap[0], "Debe haber exactamente 2 actualizaciones (una por usuario)");
     assertEquals(-60, u1.getBalance(), "u1 debería tener -60");
     assertEquals(60, u2.getBalance(), "u2 debería tener 60");
+  }
+  
+  @Test
+  void testTransaccionesNegativas() {
+    Transaccion t1 = new Transaccion(1, 1, 2, -10);
+    Transaccion t2 = new Transaccion(2, 3, 4, -5);
+    
+    assertTrue(t1.compareTo(t2) < 0, "t1 debería ser menor que t2 con montos negativos (-10 < -5)");
+    
+    Heap<Usuario> usuarios = new Heap<>(5);
+    Usuario[] usuariosArray = new Usuario[5];
+    for (int i = 1; i <= 4; i++) {
+      Usuario u = new Usuario(i);
+      usuarios.agregarAlHeap(u);
+      usuariosArray[i] = u;
+    }
+    
+    Transaccion[] transacciones = { t1, t2 };
+    Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
+    
+    assertEquals(10, usuariosArray[1].getBalance(), "u1 debería tener +10 (recibe negativo)");
+    assertEquals(-10, usuariosArray[2].getBalance(), "u2 debería tener -10 (paga negativo)");
+    assertEquals(5, usuariosArray[3].getBalance(), "u3 debería tener +5 (recibe negativo)");
+    assertEquals(-5, usuariosArray[4].getBalance(), "u4 debería tener -5 (paga negativo)");
+  }
+  
+  @Test
+  void testComplejidadCompareTo() {
+    int n = 1000000;
+    Transaccion t1 = new Transaccion(1, 1, 2, 10);
+    Transaccion t2 = new Transaccion(2, 3, 4, 20);
+    
+    long start = System.nanoTime();
+    for (int i = 0; i < n; i++) {
+      t1.compareTo(t2);
+    }
+    long end = System.nanoTime();
+    
+    System.out.println("compareTo() x1.000.000 -> " + ((end - start) / n) + "ns por operación");
+  }
+  
+  @Test
+  void testAplicarTransaccionesCasosBorde() {
+    // Caso borde: usuario con valor máximo de int
+    Heap<Usuario> usuarios = new Heap<>(3);
+    Usuario[] usuariosArray = new Usuario[3];
+    Usuario u1 = new Usuario(1);
+    Usuario u2 = new Usuario(2);
+    usuarios.agregarAlHeap(u1);
+    usuarios.agregarAlHeap(u2);
+    usuariosArray[1] = u1;
+    usuariosArray[2] = u2;
+    
+    u1.agregarBalance(Integer.MAX_VALUE - 10);
+    
+    Transaccion[] transacciones = {
+      new Transaccion(0, 1, 2, 5)
+    };
+    
+    Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
+    assertEquals(Integer.MAX_VALUE - 15, u1.getBalance(), "u1 debería tener MAX_VALUE - 15");
+    assertEquals(5, u2.getBalance(), "u2 debería tener 5");
   }
 }

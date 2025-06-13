@@ -22,13 +22,9 @@ public class Bloque {
         this.montoTotal = 0;
 
         // Inicializamos la lista y calculamos estadísticas - O(n)
-        //this.listaHandle = new ArrayList<Handle>(listaEnlazadaTransacciones.longitud());
         for (int i = 0; i < listaTrx.length; i++) {
             Transaccion t = listaTrx[i];
             this.listaEnlazadaTransacciones.agregarAtras(t);
-            //Handle nuevoHandle = new Handle(t);
-            //this.listaHandle.add(i, nuevoHandle);
-            t.setIndexEnBloque(i);
 
             if (t.id_comprador() != 0) {
                 montoTotal += t.monto();
@@ -37,15 +33,12 @@ public class Bloque {
         }
 
         // Construimos el heap - O(n)
-        //ListaEnlazada<Transaccion> listaEnlazada = new ListaEnlazada<Transaccion>();
-        //heapListaEnlazada = listaEnlazada.toArray();
         ArrayList<Transaccion> heapLista = new ArrayList<>(listaEnlazadaTransacciones.longitud());
         Iterador<Transaccion> it = listaEnlazadaTransacciones.iterador();
-        
-        int c = 0;
+
         while (it.haySiguiente()) {
-            heapLista.add(c, it.siguiente());
-            c++;
+            Transaccion trx = it.siguiente();
+            heapLista.add(trx);
         }
         this.heapTransacciones = new Heap<>(heapLista);
     }
@@ -54,7 +47,7 @@ public class Bloque {
      * Devuelve las transacciones del bloque como un array.
      * Complejidad: O(n)
      */
-    public Transaccion[] getTransacciones() { // O(N)
+    public Transaccion[] getTransacciones() { // O(n)
         ArrayList<Transaccion> nuevaLista = new ArrayList<>(listaEnlazadaTransacciones.longitud());
         Iterador<Transaccion> it = listaEnlazadaTransacciones.iterador();
         
@@ -63,10 +56,7 @@ public class Bloque {
             nuevaLista.add(c, it.siguiente());
             c++;
         }
-        //Transaccion ultima = it.siguiente();
-        // if (ultima != null) {
-        //     nuevaLista.add(c, ultima);
-        // }
+        // 
         return nuevaLista.toArray(new Transaccion[0]);
     }
 
@@ -82,7 +72,7 @@ public class Bloque {
     /**
      * Elimina y devuelve la transacción de mayor valor del bloque.
      * Mantiene el orden relativo de las transacciones restantes.
-     * Complejidad: O(log n) para el heap, O(n) para actualizar lista
+     * Complejidad: O(log n)
      */
     public Transaccion eliminarMayorValor() {
         if (heapTransacciones.getLongitud() == 0) return null;
@@ -113,10 +103,4 @@ public class Bloque {
     public int montoMedio() { // O(1)
         return cantTrx == 0 ? 0 : montoTotal / cantTrx;
     }
-
-//Lo necesitamos?
-/*     // Devuelve la cantidad de transacciones en el bloque con complejidad O(1).
-    public int cantidad() {
-        return heapTransacciones.getLongitud();
-    } */
 }

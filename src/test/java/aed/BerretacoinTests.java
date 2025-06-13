@@ -440,10 +440,10 @@ public class BerretacoinTests {
         int[] casos = {1000, 10000, 100000, 1000000};
         for (int idx = 0; idx < casos.length; idx++) {
             int n = casos[idx];
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             Berretacoin sistema = new Berretacoin(n);
-            long end = System.currentTimeMillis();
-            System.out.println("nuevoBerretacoin(" + n + ") -> " + (end - start) + "ms");
+            long end = System.nanoTime();
+            System.out.println("nuevoBerretacoin(" + n + ") -> " + (end - start) + "ns");
             // Verifica que el sistema se crea correctamente
             assert sistema.maximoTenedor() == 1 : "El máximo tenedor inicial debe ser 1";
         }
@@ -466,7 +466,7 @@ public class BerretacoinTests {
                 long start = System.nanoTime();
                 sistema.agregarBloque(transacciones);
                 long end = System.nanoTime();
-                System.out.println("agregarBloque() con P=" + P + " usuarios y n=" + N + " transacciones -> " + (end - start) + "ms");
+                System.out.println("agregarBloque() con P=" + P + " usuarios y n=" + N + " transacciones -> " + (end - start) + "ns");
             }
         }
     }

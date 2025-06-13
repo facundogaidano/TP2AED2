@@ -11,7 +11,7 @@ public class Berretacoin {
     private Heap<Usuario> usuarios;     // MaxHeap de usuarios ordenados por balance.
     private Usuario[] usuariosArray;    // Acceso a usuarios O(1) por ID.
     private Usuario maxTenedor;         // Usuario con mayor balance.
-    private int contadorBloques = 0;    // Contador de bloques en la cadena.
+    private int contadorBloques;    // Contador de bloques en la cadena.
     private Bloque ultimoBloque;        // Último bloque agregado.
 
     /**
@@ -76,7 +76,8 @@ public class Berretacoin {
      * Complejidad: O(1)
      */
     public int maximoTenedor(){
-        if (maxTenedor == null) return 0;
+        if (usuarios.getLongitud() == 0) return 0;
+        maxTenedor = usuarios.getMaximo();
         return maxTenedor.getId();
     }
 
