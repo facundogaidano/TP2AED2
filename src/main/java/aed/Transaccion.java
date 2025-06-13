@@ -41,6 +41,8 @@ public class Transaccion implements Comparable<Transaccion> {
                 Usuario comprador = usuariosArray[trx.id_comprador()];
                 comprador.agregarBalance(-trx.monto());
                 
+                // Si el usuario no fue actualizado, el valor de su indice en usuariosActualizados sera False, entonces
+                // lo actualizamos a True.
                 if (!usuariosActualizados[trx.id_comprador()]) {
                     usuariosActualizados[trx.id_comprador()] = true;
                     usuariosAfectados.add(comprador); // Los agrega a lista de usuarios a actualizar.
@@ -50,6 +52,7 @@ public class Transaccion implements Comparable<Transaccion> {
             Usuario vendedor = usuariosArray[trx.id_vendedor()];
             vendedor.agregarBalance(trx.monto());
 
+            // Repetimos la misma logica que para los usuarios compradores.
             if (!usuariosActualizados[trx.id_vendedor()]) { // O(1)
                 usuariosActualizados[trx.id_vendedor()] = true;
                 usuariosAfectados.add(vendedor); // Los agrega a lista de usuarios a actualizar.

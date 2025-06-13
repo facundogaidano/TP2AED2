@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 /**
  * Representa un bloque en la cadena de Berretacoin.
- * Mantiene una estructura optimizada para operaciones sobre transacciones.
+ * Mantiene una estructura para operar sobre transacciones.
  */
 public class Bloque {
     private Heap<Transaccion> heapTransacciones;        // Max heap para transacción de mayor valor.
-    private ArrayList<Transaccion> listaTransacciones;  // Lista para el orden original.
-    //private int idBloque;                                Lo necesitamos?
+    private ListaEnlazada<Transaccion> listaEnlazadaTransacciones;  // Lista para el orden original.
     private int montoTotal;                             // Suma de montos para cálculo O(1)
     private int cantTrx;                                // Contador de transacciones no-creación.
 
@@ -18,15 +17,17 @@ public class Bloque {
      * Complejidad: O(n)
      */
     public Bloque(int idBloque, Transaccion[] listaTrx) {
-        // this.idBloque = idBloque;
-        this.listaTransacciones = new ArrayList<>(listaTrx.length);
+        this.listaEnlazadaTransacciones = new ListaEnlazada<Transaccion>();
         this.cantTrx = 0;
         this.montoTotal = 0;
 
         // Inicializamos la lista y calculamos estadísticas - O(n)
+        //this.listaHandle = new ArrayList<Handle>(listaEnlazadaTransacciones.longitud());
         for (int i = 0; i < listaTrx.length; i++) {
             Transaccion t = listaTrx[i];
-            this.listaTransacciones.add(t);
+            this.listaEnlazadaTransacciones.agregarAtras(t);
+            //Handle nuevoHandle = new Handle(t);
+            //this.listaHandle.add(i, nuevoHandle);
             t.setIndexEnBloque(i);
 
             if (t.id_comprador() != 0) {
@@ -36,8 +37,17 @@ public class Bloque {
         }
 
         // Construimos el heap - O(n)
-        ArrayList<Transaccion> heapList = new ArrayList<>(listaTransacciones);
-        this.heapTransacciones = new Heap<>(heapList);
+        //ListaEnlazada<Transaccion> listaEnlazada = new ListaEnlazada<Transaccion>();
+        //heapListaEnlazada = listaEnlazada.toArray();
+        ArrayList<Transaccion> heapLista = new ArrayList<>(listaEnlazadaTransacciones.longitud());
+        Iterador<Transaccion> it = listaEnlazadaTransacciones.iterador();
+        
+        int c = 0;
+        while (it.haySiguiente()) {
+            heapLista.add(c, it.siguiente());
+            c++;
+        }
+        this.heapTransacciones = new Heap<>(heapLista);
     }
 
     /**
@@ -45,7 +55,19 @@ public class Bloque {
      * Complejidad: O(n)
      */
     public Transaccion[] getTransacciones() { // O(N)
-        return listaTransacciones.toArray(new Transaccion[0]);
+        ArrayList<Transaccion> nuevaLista = new ArrayList<>(listaEnlazadaTransacciones.longitud());
+        Iterador<Transaccion> it = listaEnlazadaTransacciones.iterador();
+        
+        int c = 0;
+        while (it.haySiguiente()) {
+            nuevaLista.add(c, it.siguiente());
+            c++;
+        }
+        //Transaccion ultima = it.siguiente();
+        // if (ultima != null) {
+        //     nuevaLista.add(c, ultima);
+        // }
+        return nuevaLista.toArray(new Transaccion[0]);
     }
 
     /**
@@ -66,31 +88,19 @@ public class Bloque {
         if (heapTransacciones.getLongitud() == 0) return null;
         
         // Obtener la transacción de mayor valor - O(1)
-        Transaccion max = heapTransacciones.sacarMaximo();
-        
+        Transaccion max = heapTransacciones.sacarMaximo(); // O(log n)
+
         if (max != null) {
-            // Buscar y eliminar de la lista manteniendo orden relativo - O(n)
-            for (int i = 0; i < listaTransacciones.size(); i++) {
-                if (listaTransacciones.get(i).equals(max)) {
-                    // Eliminar transacción manteniendo orden original
-                    listaTransacciones.remove(i);
-                    
-                    // Actualizar índices de transacciones siguientes
-                    for (int j = i; j < listaTransacciones.size(); j++) {
-                        listaTransacciones.get(j).setIndexEnBloque(j);
-                    }
-                    
-                    // Actualizar los valores si no era de creación
-                    if (max.id_comprador() != 0) {
-                        montoTotal -= max.monto();
-                        cantTrx--;
-                    }
-                    break;
+            if (listaEnlazadaTransacciones.obtener(max.id()).equals(max)) {
+                // Eliminar transacción manteniendo orden original
+                listaEnlazadaTransacciones.eliminar(max.id()); // O(1)
+                
+                // Actualizar los valores si no era de creación
+                if (max.id_comprador() != 0) {
+                    montoTotal -= max.monto();
+                    cantTrx--;
                 }
             }
-            
-            // Marcar como eliminada de la lista
-            max.setIndexEnBloque(-1);
         }
         
         return max;
@@ -108,10 +118,5 @@ public class Bloque {
 /*     // Devuelve la cantidad de transacciones en el bloque con complejidad O(1).
     public int cantidad() {
         return heapTransacciones.getLongitud();
-    }
-
-    // Devuelve el ID del bloque con complejidad O(1).
-    public int getIdBloque() {
-        return idBloque;
     } */
 }

@@ -168,12 +168,12 @@ public class Heap<T extends Comparable<T>> {
     /**
      * Actualiza la posición de un Usuario en el heap tras un cambio de prioridad.
      * Utiliza acceso directo O(1) al índice almacenado en el Usuario.
-     * Complejidad: O(log n)
+     * Complejidad: O(log P)
      */
     public void actualizarPosicionUsuario(Usuario usuario) {
         int indice = usuario.getHeapIndex();
         if (indice >= 0 && indice < heap.size()) {
-            // Si el usuario está en el heap, reorganizar hacia arriba y abajo - O(log n)
+            // Si el usuario está en el heap, reorganizar hacia arriba y abajo - O(log P)
             if (heap.get(indice) == usuario) {
                 heapifyUp(indice);
                 // Obtener nuevo índice después de heapifyUp
@@ -199,7 +199,7 @@ public class Heap<T extends Comparable<T>> {
     public int getLongitud() { return heap.size(); }
 
 // No hay necesidad de un Handle. Cada usuario tiene dentro un heapIndex que indica su posición en el heap.
-/*     public class Handle {
+    /* public class Handle {
         private int indice;
 
         public Handle(int indice) {
