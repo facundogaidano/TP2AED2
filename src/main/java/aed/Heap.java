@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * No utiliza un Handle externo, cada Usuario tiene su propio índice en el heap.
  */
 public class Heap<T extends Comparable<T>> {
-    private ArrayList<T> heap; // Lista que almacena los elementos del heap
-    private ArrayList<Integer> listaHandle;
+    private ArrayList<T> heap;                  // Lista que almacena los elementos del heap
+    private ArrayList<Integer> listaHandle;     // Lista de índices para acceso O(1) a elementos Usuario
 
 
     /**
@@ -31,24 +31,31 @@ public class Heap<T extends Comparable<T>> {
      * Complejidad: O(n)
      */
     public Heap(ArrayList<T> elementos) {
-        this.heap = new ArrayList<>(elementos);
-        this.listaHandle = new ArrayList<>();
-
+        int n = elementos.size();
+        this.heap = new ArrayList<>(n);
+        
+        // Recorrido 1: Encontrar maxId mientras copiamos elementos - O(n)
         int maxId = 0;
         for (T elemento : elementos) {
+            heap.add(elemento);
+            
             if (elemento instanceof Usuario) {
                 maxId = Math.max(maxId, ((Usuario)elemento).getId());
             }
         }
-
+        
+        // Inicializar listaHandle con capacidad conocida de una sola vez - O(n)
+        this.listaHandle = new ArrayList<>(maxId + 1);
         for (int i = 0; i <= maxId; i++) {
             listaHandle.add(-1);
         }
-
-        for (int indice = 0; indice < heap.size(); indice++) {
-            if (heap.get(indice) instanceof Usuario) {
-                Usuario u = (Usuario)heap.get(indice);
-                listaHandle.set(u.getId(), indice);
+        
+        // Mapear posiciones de Usuarios directo - evitamos verificación instanceof redundante - O(n)
+        for (int i = 0; i < n; i++) {
+            T elemento = heap.get(i);
+            if (elemento instanceof Usuario) {
+                Usuario u = (Usuario)elemento;
+                listaHandle.set(u.getId(), i);
             }
         }
 

@@ -11,7 +11,6 @@ public class Berretacoin {
     private Heap<Usuario> usuarios;     // MaxHeap de usuarios ordenados por balance.
     private Usuario[] usuariosArray;    // Acceso a usuarios O(1) por ID.
     private Usuario maxTenedor;         // Usuario con mayor balance.
-    private int contadorBloques;    // Contador de bloques en la cadena.
     private Bloque ultimoBloque;        // Último bloque agregado.
 
     /**
@@ -33,7 +32,6 @@ public class Berretacoin {
         // Crear el heap de usuarios con los usuarios inicializados - O(P)
         this.usuarios = new Heap<>(listaUsuarios);
         this.maxTenedor = usuarios.getMaximo();
-        this.contadorBloques = 0;
     }
 
     /**
@@ -42,9 +40,8 @@ public class Berretacoin {
      */
     public void agregarBloque(Transaccion[] transacciones){
         // Crear nuevo bloque y actualizar referencias - O(n)
-        Bloque bloque = new Bloque(contadorBloques, transacciones);
+        Bloque bloque = new Bloque(transacciones);
         this.ultimoBloque = bloque;
-        contadorBloques++;
         
         // Aplicar transacciones y actualizar balances de usuarios - O(n * log P)
         Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);

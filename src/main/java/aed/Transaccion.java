@@ -70,16 +70,15 @@ public class Transaccion implements Comparable<Transaccion> {
      * Complejidad: O(log P)
      */
     public static void revertirTransaccion(Heap<Usuario> heap, Transaccion trx, Usuario[] usuariosArray) {
-        // Actualizo los balances
         if (trx.id_comprador() != 0) {
             Usuario comprador = usuariosArray[trx.id_comprador()];
-            comprador.agregarBalance(trx.monto()); // O(1)
-            heap.actualizarPosicionUsuario(comprador); // O(log P)
+            comprador.agregarBalance(trx.monto());
+            heap.actualizarPosicionUsuario(comprador);
         }
         
         Usuario vendedor = usuariosArray[trx.id_vendedor()];
-        vendedor.agregarBalance(-trx.monto()); // O(1)
-        heap.actualizarPosicionUsuario(vendedor); // O(log P)
+        vendedor.agregarBalance(-trx.monto());
+        heap.actualizarPosicionUsuario(vendedor);
         
     }
 

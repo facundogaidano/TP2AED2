@@ -10,7 +10,7 @@ public class BloqueTests {
   void testBloqueVacio() {
     // Caso borde: Bloque sin transacciones
     Transaccion[] transacciones = {};
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     assertEquals(0, bloque.getTransacciones().length, "Bloque vacío debe tener 0 transacciones");
     assertNull(bloque.transaccionMayorValor(), "Bloque vacío debe devolver null al consultar mayor valor");
@@ -24,7 +24,7 @@ public class BloqueTests {
     Transaccion[] transacciones = {
       new Transaccion(0, 1, 2, 100)
     };
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     assertEquals(1, bloque.getTransacciones().length, "Bloque debe contener 1 transacción");
     Transaccion tx = bloque.transaccionMayorValor();
@@ -44,7 +44,7 @@ public class BloqueTests {
       new Transaccion(1, 2, 3, 100),
       new Transaccion(2, 3, 4, 100)
     };
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     Transaccion mayor = bloque.transaccionMayorValor();
     assertEquals(2, mayor.id(), "Con montos iguales, debe seleccionar el de menor ID");
@@ -64,7 +64,7 @@ public class BloqueTests {
       new Transaccion(0, 0, 1, 150), // Transacción de creación
       new Transaccion(2, 3, 4, 100)  // Transacción normal
     };
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     // El promedio solo considera transacciones normales
     assertEquals(100, bloque.montoMedio(), "Promedio solo debe considerar transacciones normales");
@@ -87,7 +87,7 @@ public class BloqueTests {
       new Transaccion(1, 2, 3, 100),
       new Transaccion(2, 3, 4, -100)
     };
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     // El promedio debe considerar valores negativos
     assertEquals(-50/3, bloque.montoMedio(), "Promedio debe considerar valores negativos");
@@ -104,7 +104,7 @@ public class BloqueTests {
       new Transaccion(2, 3, 4, 350),
       new Transaccion(3, 4, 5, 200)
     };
-    Bloque bloque = new Bloque(1, transacciones);
+    Bloque bloque = new Bloque(transacciones);
     
     assertEquals(4, bloque.getTransacciones().length, "Debe haber 4 transacciones");
     assertEquals(237, bloque.montoMedio(), "Monto medio debe ser (150+250+350+200)/4=237.5 ≈ 237");
@@ -131,7 +131,7 @@ public class BloqueTests {
         transacciones[j] = new Transaccion(j, 1, 2, 100);
       }
       
-      Bloque bloque = new Bloque(1, transacciones);
+      Bloque bloque = new Bloque(transacciones);
       
       long inicio = System.nanoTime();
       Transaccion[] resultado = bloque.getTransacciones();
@@ -154,7 +154,7 @@ public class BloqueTests {
         transacciones[j] = new Transaccion(j, 1, 2, 100);
       }
       
-      Bloque bloque = new Bloque(1, transacciones);
+      Bloque bloque = new Bloque(transacciones);
       
       long inicio = System.nanoTime();
       for (int k = 0; k < 1000; k++) {
@@ -179,7 +179,7 @@ public class BloqueTests {
         transacciones[j] = new Transaccion(j, 1, 2, j);
       }
       
-      Bloque bloque = new Bloque(1, transacciones);
+      Bloque bloque = new Bloque(transacciones);
       
       long inicio = System.nanoTime();
       for (int k = 0; k < 1000; k++) {
@@ -204,7 +204,7 @@ public class BloqueTests {
         transacciones[j] = new Transaccion(j, 1, 2, n - j);
       }
       
-      Bloque bloque = new Bloque(1, transacciones);
+      Bloque bloque = new Bloque(transacciones);
       
       long inicio = System.nanoTime();
       Transaccion maxima = bloque.eliminarMayorValor();
@@ -228,7 +228,7 @@ public class BloqueTests {
       }
       
       long inicio = System.nanoTime();
-      Bloque bloque = new Bloque(1, transacciones);
+      Bloque bloque = new Bloque(transacciones);
       long fin = System.nanoTime();
       
       System.out.println("Construcción de bloque con " + n + " transacciones -> " + (fin - inicio) + "ns");

@@ -17,6 +17,14 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         Nodo(T v){ valor = v; }
     }
 
+    public Nodo getNodo(int indice) {
+        return listaHandle.get(indice);
+    }
+
+    public int getIndiceNodo(Nodo nodo) {
+        return listaHandle.indexOf(nodo);
+    }
+
     public ListaEnlazada() {
         primNodo = null;
         ultNodo = null;
@@ -169,6 +177,32 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         public void setIndice(Nodo indice) {
             this.indice = indice;
         }
+        
+        public void eliminar() {
+            if (indice == null) return;
+            
+            if (indice.ant != null) {
+                indice.ant.sig = indice.sig;
+            } else {
+                primNodo = indice.sig;
+            }
+            
+            if (indice.sig != null) {
+                indice.sig.ant = indice.ant;
+            } else {
+                ultNodo = indice.ant;
+            }
+            
+            int posicion = listaHandle.indexOf(indice);
+            if (posicion >= 0) {
+                listaHandle.remove(posicion);
+            }
+            
+            longLista--;
+        }
+        
+        public T obtenerValor() {
+            return indice != null ? indice.valor : null;
+        }
     }
-
 }

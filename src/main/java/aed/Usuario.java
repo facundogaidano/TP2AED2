@@ -15,7 +15,6 @@ public class Usuario implements Comparable<Usuario> {
     public Usuario(int id) {
         this.id = id;
         this.balance = 0;
-        // this.heapIndex = -1;
     }
 
     /**
@@ -41,24 +40,7 @@ public class Usuario implements Comparable<Usuario> {
     public int getBalance() {
         return balance;
     }
-
-    /**
-     * Actualiza el índice del usuario en el heap.
-     * Evitamos el uso de un Handle con este sistema.
-     * Complejidad: O(1)
-     */
-    // public void setHeapIndex(int index) {
-    //     this.heapIndex = index;
-    // }
-
-    // /**
-    //  * Devuelve el índice del usuario en el heap.
-    //  * Complejidad: O(1)
-    //  */
-    // public int getHeapIndex() {
-    //     return this.heapIndex;
-    // }
-
+    
     /**
      * Compara este usuario con otro para ordenamiento en el heap.
      * Primero por balance, y en caso de empate, el de menor ID es prioritario.
