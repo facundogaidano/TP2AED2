@@ -7,7 +7,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     private Nodo primNodo;
     private Nodo ultNodo;
     private int longLista;
-    private ArrayList<Nodo> listaHandle;
+    private ArrayList<Nodo> listaNodoHandle;
 
     private class Nodo {
         T valor;
@@ -18,18 +18,18 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     }
 
     public Nodo getNodo(int indice) {
-        return listaHandle.get(indice);
+        return listaNodoHandle.get(indice);
     }
 
     public int getIndiceNodo(Nodo nodo) {
-        return listaHandle.indexOf(nodo);
+        return listaNodoHandle.indexOf(nodo);
     }
 
     public ListaEnlazada() {
         primNodo = null;
         ultNodo = null;
         longLista = 0;
-        listaHandle = new ArrayList<Nodo>();
+        listaNodoHandle = new ArrayList<Nodo>();
     }
 
     public int longitud() {
@@ -47,11 +47,11 @@ public class ListaEnlazada<T> implements Secuencia<T> {
           ultNodo = nuevo;
         }
         longLista = longLista + 1;
-        listaHandle.add(nuevo);
+        listaNodoHandle.add(nuevo);
     }
 
     public T obtener(int i) {
-        return listaHandle.get(i).valor;
+        return listaNodoHandle.get(i).valor;
     }
 
     public T proxNodo(Nodo i) {
@@ -64,7 +64,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 
 
     public void eliminar(int i) {
-        Nodo actual = listaHandle.get(i);
+        Nodo actual = listaNodoHandle.get(i);
         if (actual.ant != null) {
             actual.ant.sig = actual.sig;
         } else {
@@ -75,7 +75,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         } else {
             ultNodo = actual.ant;
         }
-        listaHandle.remove(i);
+        listaNodoHandle.remove(i);
         longLista = longLista - 1;
     }
 
@@ -91,7 +91,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
         primNodo = null;
         ultNodo = null;
         longLista = 0;
-        listaHandle = new ArrayList<Nodo>();
+        listaNodoHandle = new ArrayList<Nodo>();
 
         Nodo actual = lista.primNodo;
         while (actual != null) {
@@ -101,7 +101,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     }
 
     public int obtenerCantidadHandles() {
-        return listaHandle.size();
+        return listaNodoHandle.size();
     }
     
     @Override
@@ -193,9 +193,9 @@ public class ListaEnlazada<T> implements Secuencia<T> {
                 ultNodo = indice.ant;
             }
             
-            int posicion = listaHandle.indexOf(indice);
+            int posicion = listaNodoHandle.indexOf(indice);
             if (posicion >= 0) {
-                listaHandle.remove(posicion);
+                listaNodoHandle.remove(posicion);
             }
             
             longLista--;

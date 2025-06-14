@@ -17,6 +17,7 @@ public class Bloque {
      * Constructor de bloque con un conjunto de transacciones.
      * Complejidad: O(n)
      */
+    @SuppressWarnings("unchecked") // Para evitar warnings de tipo genérico.
     public Bloque(Transaccion[] listaTrx) {
         this.listaEnlazadaTransacciones = new ListaEnlazada<Transaccion>();
         this.cantTrx = 0;

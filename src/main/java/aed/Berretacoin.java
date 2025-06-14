@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class Berretacoin {
     private Heap<Usuario> usuarios;     // MaxHeap de usuarios ordenados por balance.
     private Usuario[] usuariosArray;    // Acceso a usuarios O(1) por ID.
-    private Usuario maxTenedor;         // Usuario con mayor balance.
     private Bloque ultimoBloque;        // Último bloque agregado.
 
     /**
@@ -31,7 +30,6 @@ public class Berretacoin {
 
         // Crear el heap de usuarios con los usuarios inicializados - O(P)
         this.usuarios = new Heap<>(listaUsuarios);
-        this.maxTenedor = usuarios.getMaximo();
     }
 
     /**
@@ -45,9 +43,6 @@ public class Berretacoin {
         
         // Aplicar transacciones y actualizar balances de usuarios - O(n * log P)
         Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
-        
-        // Actualizar referencia al usuario con mayor balance
-        this.maxTenedor = usuarios.getMaximo();
     }
 
     /**
@@ -74,8 +69,7 @@ public class Berretacoin {
      */
     public int maximoTenedor(){
         if (usuarios.getLongitud() == 0) return 0;
-        maxTenedor = usuarios.getMaximo();
-        return maxTenedor.getId();
+        return usuarios.getMaximo().getId();
     }
 
     /**
@@ -100,8 +94,5 @@ public class Berretacoin {
         
         // Revertir los efectos de la transacción en los usuarios - O(log P)
         Transaccion.revertirTransaccion(usuarios, hackeada, usuariosArray);
-        
-        // Actualizar la referencia al usuario con mayor balance - O(1)
-        this.maxTenedor = usuarios.getMaximo();
     }
 }
