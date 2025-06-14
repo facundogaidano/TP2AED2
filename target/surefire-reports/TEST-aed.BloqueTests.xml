@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="aed.BloqueTests" time="0.093" tests="11" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/test-classes:/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/classes:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.2/junit-jupiter-engine-5.9.2.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-engine/1.9.2/junit-platform-engine-1.9.2.jar:/home/marcos/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-commons/1.9.2/junit-platform-commons-1.9.2.jar:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.2/junit-jupiter-api-5.9.2.jar:/home/marcos/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:"/>
+    <property name="java.vm.vendor" value="Ubuntu"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire/surefirebooter-20250614182600233_3.jar /mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire 2025-06-14T18-26-00_110-jvmRun1 surefire-20250614182600233_1tmp surefire_0-20250614182600233_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/test-classes:/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/classes:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.2/junit-jupiter-engine-5.9.2.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-engine/1.9.2/junit-platform-engine-1.9.2.jar:/home/marcos/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-commons/1.9.2/junit-platform-commons-1.9.2.jar:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.2/junit-jupiter-api-5.9.2.jar:/home/marcos/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/marcos"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-01-21"/>
+    <property name="java.home" value="/usr/lib/jvm/java-21-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire/surefirebooter-20250614182600233_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.6+7-Ubuntu-124.04.1"/>
+    <property name="user.name" value="marcos"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.167.4-microsoft-standard-WSL2"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/marcos/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-21"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="21.0.6"/>
+    <property name="user.dir" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Ubuntu"/>
+    <property name="java.vm.version" value="21.0.6+7-Ubuntu-124.04.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testMontosNegativos" classname="aed.BloqueTests" time="0"/>
+  <testcase name="testComplejidadEliminarMayorValor" classname="aed.BloqueTests" time="0.014">
+    <system-out><![CDATA[eliminarMayorValor() con 1000 transacciones -> 14227ns
+eliminarMayorValor() con 10000 transacciones -> 1583ns
+eliminarMayorValor() con 100000 transacciones -> 70269ns
+]]></system-out>
+  </testcase>
+  <testcase name="testTransaccionesCreacion" classname="aed.BloqueTests" time="0.001"/>
+  <testcase name="testBloqueUnicaTransaccion" classname="aed.BloqueTests" time="0.006"/>
+  <testcase name="testBloqueVacio" classname="aed.BloqueTests" time="0.005"/>
+  <testcase name="testConstruccionBloque" classname="aed.BloqueTests" time="0.025">
+    <system-out><![CDATA[Construcción de bloque con 1000 transacciones -> 45025ns
+Construcción de bloque con 10000 transacciones -> 2270534ns
+Construcción de bloque con 100000 transacciones -> 14162852ns
+]]></system-out>
+  </testcase>
+  <testcase name="testComplejidadMontoMedio" classname="aed.BloqueTests" time="0.01">
+    <system-out><![CDATA[montoMedio() x1.000 con 1000 transacciones -> 77ns
+montoMedio() x1.000 con 10000 transacciones -> 27ns
+montoMedio() x1.000 con 100000 transacciones -> 15ns
+]]></system-out>
+  </testcase>
+  <testcase name="testComplejidadTransaccionMayorValor" classname="aed.BloqueTests" time="0.01">
+    <system-out><![CDATA[transaccionMayorValor() x1.000 con 1000 transacciones -> 34ns
+transaccionMayorValor() x1.000 con 10000 transacciones -> 87ns
+transaccionMayorValor() x1.000 con 100000 transacciones -> 21ns
+]]></system-out>
+  </testcase>
+  <testcase name="testComplejidadGetTransacciones" classname="aed.BloqueTests" time="0.014">
+    <system-out><![CDATA[getTransacciones() con 1000 transacciones -> 4183ns
+getTransacciones() con 10000 transacciones -> 36860ns
+getTransacciones() con 100000 transacciones -> 779143ns
+]]></system-out>
+  </testcase>
+  <testcase name="testBloqueSecuencial" classname="aed.BloqueTests" time="0.001"/>
+  <testcase name="testTransaccionesConMismoMonto" classname="aed.BloqueTests" time="0.001"/>
+</testsuite>

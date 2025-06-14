@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="aed.BerretacoinTests" time="2.519" tests="21" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/test-classes:/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/classes:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.2/junit-jupiter-engine-5.9.2.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-engine/1.9.2/junit-platform-engine-1.9.2.jar:/home/marcos/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-commons/1.9.2/junit-platform-commons-1.9.2.jar:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.2/junit-jupiter-api-5.9.2.jar:/home/marcos/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:"/>
+    <property name="java.vm.vendor" value="Ubuntu"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire/surefirebooter-20250614182600233_3.jar /mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire 2025-06-14T18-26-00_110-jvmRun1 surefire-20250614182600233_1tmp surefire_0-20250614182600233_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/test-classes:/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/classes:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.2/junit-jupiter-engine-5.9.2.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-engine/1.9.2/junit-platform-engine-1.9.2.jar:/home/marcos/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/marcos/.m2/repository/org/junit/platform/junit-platform-commons/1.9.2/junit-platform-commons-1.9.2.jar:/home/marcos/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.2/junit-jupiter-api-5.9.2.jar:/home/marcos/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/marcos"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-01-21"/>
+    <property name="java.home" value="/usr/lib/jvm/java-21-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3/target/surefire/surefirebooter-20250614182600233_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.6+7-Ubuntu-124.04.1"/>
+    <property name="user.name" value="marcos"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.167.4-microsoft-standard-WSL2"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/marcos/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-21"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="21.0.6"/>
+    <property name="user.dir" value="/mnt/c/Users/myurz/Downloads/TP2AED2-3/TP2AED2-3"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Ubuntu"/>
+    <property name="java.vm.version" value="21.0.6+7-Ubuntu-124.04.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testHackearTxEsO_logNxP" classname="aed.BerretacoinTests" time="1.232">
+    <system-out><![CDATA[hackearTx() con P=1000 usuarios y N=1000 transacciones -> 93300ns
+hackearTx() con P=1000 usuarios y N=10000 transacciones -> 265045ns
+hackearTx() con P=1000 usuarios y N=100000 transacciones -> 1700605ns
+hackearTx() con P=1000 usuarios y N=1000000 transacciones -> 3162662ns
+hackearTx() con P=10000 usuarios y N=1000 transacciones -> 96938ns
+hackearTx() con P=10000 usuarios y N=10000 transacciones -> 97814ns
+hackearTx() con P=10000 usuarios y N=100000 transacciones -> 93792ns
+hackearTx() con P=10000 usuarios y N=1000000 transacciones -> 392720ns
+hackearTx() con P=100000 usuarios y N=1000 transacciones -> 14256ns
+hackearTx() con P=100000 usuarios y N=10000 transacciones -> 16642ns
+hackearTx() con P=100000 usuarios y N=100000 transacciones -> 98880ns
+hackearTx() con P=100000 usuarios y N=1000000 transacciones -> 284096ns
+hackearTx() con P=1000000 usuarios y N=1000 transacciones -> 39312ns
+hackearTx() con P=1000000 usuarios y N=10000 transacciones -> 51980ns
+hackearTx() con P=1000000 usuarios y N=100000 transacciones -> 53419ns
+hackearTx() con P=1000000 usuarios y N=1000000 transacciones -> 307498ns
+]]></system-out>
+  </testcase>
+  <testcase name="testTxUltimoBloqueEsO_n" classname="aed.BerretacoinTests" time="0.318">
+    <system-out><![CDATA[txUltimoBloque() con 1000 transacciones -> 10272013ns
+txUltimoBloque() con 10000 transacciones -> 838485ns
+txUltimoBloque() con 100000 transacciones -> 4192323ns
+txUltimoBloque() con 1000000 transacciones -> 12199121ns
+]]></system-out>
+  </testcase>
+  <testcase name="hackeoUnicaTransaccion" classname="aed.BerretacoinTests" time="0.012"/>
+  <testcase name="testAgregarBloqueO_nLogP" classname="aed.BerretacoinTests" time="0.73">
+    <system-out><![CDATA[agregarBloque() con P=1000 usuarios y n=1000 transacciones -> 1507138ns
+agregarBloque() con P=1000 usuarios y n=10000 transacciones -> 823024ns
+agregarBloque() con P=1000 usuarios y n=100000 transacciones -> 6531558ns
+agregarBloque() con P=1000 usuarios y n=1000000 transacciones -> 120350328ns
+agregarBloque() con P=10000 usuarios y n=1000 transacciones -> 130709ns
+agregarBloque() con P=10000 usuarios y n=10000 transacciones -> 1056188ns
+agregarBloque() con P=10000 usuarios y n=100000 transacciones -> 5794072ns
+agregarBloque() con P=10000 usuarios y n=1000000 transacciones -> 91121371ns
+agregarBloque() con P=100000 usuarios y n=1000 transacciones -> 98872ns
+agregarBloque() con P=100000 usuarios y n=10000 transacciones -> 654223ns
+agregarBloque() con P=100000 usuarios y n=100000 transacciones -> 9896928ns
+agregarBloque() con P=100000 usuarios y n=1000000 transacciones -> 102077014ns
+agregarBloque() con P=1000000 usuarios y n=1000 transacciones -> 218270ns
+agregarBloque() con P=1000000 usuarios y n=10000 transacciones -> 1537018ns
+agregarBloque() con P=1000000 usuarios y n=100000 transacciones -> 8233227ns
+agregarBloque() con P=1000000 usuarios y n=1000000 transacciones -> 107146007ns
+]]></system-out>
+  </testcase>
+  <testcase name="testMontoMedioUltimoBloqueEsO_1" classname="aed.BerretacoinTests" time="0.209">
+    <system-out><![CDATA[montoMedioUltimoBloque() x1.000.000 con 1000 transacciones -> 5582ns
+montoMedioUltimoBloque() x1.000.000 con 10000 transacciones -> 2967ns
+montoMedioUltimoBloque() x1.000.000 con 100000 transacciones -> 34248ns
+montoMedioUltimoBloque() x1.000.000 con 1000000 transacciones -> 8659ns
+]]></system-out>
+  </testcase>
+  <testcase name="maximoTenedorEsElMinimoCuandoNuevo" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="hackeoTotalDeBloque" classname="aed.BerretacoinTests" time="0.006"/>
+  <testcase name="empatesEnTransaccionMayorValor" classname="aed.BerretacoinTests" time="0.009"/>
+  <testcase name="testMaximoTenedorEsO_1" classname="aed.BerretacoinTests" time="0.321">
+    <system-out><![CDATA[maximoTenedor() x1.000.000 con 1000 usuarios -> 5013ns
+maximoTenedor() x1.000.000 con 10000 usuarios -> 3172ns
+maximoTenedor() x1.000.000 con 100000 usuarios -> 35870ns
+maximoTenedor() x1.000.000 con 1000000 usuarios -> 64402ns
+]]></system-out>
+  </testcase>
+  <testcase name="empatesEnMaximoTenedor" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="agregarVariosBloques" classname="aed.BerretacoinTests" time="0.002"/>
+  <testcase name="multiplesBloquesPequenos" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="hackearVariasVeces" classname="aed.BerretacoinTests" time="0"/>
+  <testcase name="agregarBloque" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="bloqueConSoloTransaccionDeCreacion" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="hackearConVariosBloques" classname="aed.BerretacoinTests" time="0"/>
+  <testcase name="testNuevoBerretacoinEsO_P" classname="aed.BerretacoinTests" time="0.054">
+    <system-out><![CDATA[nuevoBerretacoin(1000) -> 36892ns
+nuevoBerretacoin(10000) -> 513249ns
+nuevoBerretacoin(100000) -> 4361091ns
+nuevoBerretacoin(1000000) -> 48737324ns
+]]></system-out>
+  </testcase>
+  <testcase name="testStress" classname="aed.BerretacoinTests" time="-0.456">
+    <system-out><![CDATA[Tiempo de Stress -> -459ms
+]]></system-out>
+  </testcase>
+  <testcase name="hackearConUnBloque" classname="aed.BerretacoinTests" time="0.001"/>
+  <testcase name="hackeoAfectaSaldos" classname="aed.BerretacoinTests" time="0"/>
+  <testcase name="unSoloUsuario" classname="aed.BerretacoinTests" time="0"/>
+</testsuite>

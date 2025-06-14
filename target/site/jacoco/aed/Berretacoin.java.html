@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Berretacoin.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tp2</a> &gt; <a href="index.source.html" class="el_package">aed</a> &gt; <span class="el_source">Berretacoin.java</span></div><h1>Berretacoin.java</h1><pre class="source lang-java linenums">package aed;
+
+import java.util.ArrayList;
+
+/**
+ * Implementación del sistema de criptomoneda Berretacoin.
+ * Gestiona usuarios, transacciones y bloques con estructuras optimizadas.
+ * n es el número de transacciones y P es el número de usuarios.
+ */
+public class Berretacoin {
+    private Heap&lt;Usuario&gt; usuarios;     // MaxHeap de usuarios ordenados por balance.
+    private Usuario[] usuariosArray;    // Acceso a usuarios O(1) por ID.
+    private Bloque ultimoBloque;        // Último bloque agregado.
+
+    /**
+     * Constructor que inicializa el sistema con un número dado de usuarios.
+     * Complejidad: O(P)
+     */
+<span class="fc" id="L19">    public Berretacoin(int n_usuarios){</span>
+        // Array de usuarios indexado desde 1.
+<span class="fc" id="L21">        this.usuariosArray = new Usuario[n_usuarios + 1]; </span>
+
+        // Inicializar todos los usuarios con balance cero - O(P)
+<span class="fc" id="L24">        ArrayList&lt;Usuario&gt; listaUsuarios = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        for (int i = 0; i &lt; n_usuarios; i++) {</span>
+<span class="fc" id="L26">            Usuario user = new Usuario(i + 1);</span>
+<span class="fc" id="L27">            usuariosArray[i + 1] = user;</span>
+<span class="fc" id="L28">            listaUsuarios.add(user);</span>
+        }
+
+        // Crear el heap de usuarios con los usuarios inicializados - O(P)
+<span class="fc" id="L32">        this.usuarios = new Heap&lt;&gt;(listaUsuarios);</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Agrega un bloque de transacciones a la cadena y actualiza los balances.
+     * Complejidad: O(n * log P)
+     */
+    public void agregarBloque(Transaccion[] transacciones){
+        // Crear nuevo bloque y actualizar referencias - O(n)
+<span class="fc" id="L41">        Bloque bloque = new Bloque(transacciones);</span>
+<span class="fc" id="L42">        this.ultimoBloque = bloque;</span>
+        
+        // Aplicar transacciones y actualizar balances de usuarios - O(n * log P)
+<span class="fc" id="L45">        Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Devuelve la transacción con mayor monto del último bloque.
+     * Complejidad: O(1)
+     */
+    public Transaccion txMayorValorUltimoBloque(){
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (ultimoBloque == null) return null;</span>
+<span class="fc" id="L54">        return ultimoBloque.transaccionMayorValor();</span>
+    }
+
+    /**
+     * Devuelve todas las transacciones del último bloque.
+     * Complejidad: O(n)
+     */
+    public Transaccion[] txUltimoBloque(){
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (ultimoBloque == null) return new Transaccion[0];</span>
+<span class="fc" id="L63">        return ultimoBloque.getTransacciones();</span>
+    }
+
+    /**
+     * Devuelve el ID del usuario con mayor balance.
+     * Complejidad: O(1)
+     */
+    public int maximoTenedor(){
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (usuarios.getLongitud() == 0) return 0;</span>
+<span class="fc" id="L72">        return usuarios.getMaximo().getId();</span>
+    }
+
+    /**
+     * Devuelve el monto medio de las transacciones del último bloque.
+     * Complejidad: O(1)
+     */
+    public int montoMedioUltimoBloque(){
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (ultimoBloque == null) return 0;</span>
+<span class="fc" id="L81">        return ultimoBloque.montoMedio();</span>
+    }
+
+    /**
+     * Elimina la transacción de mayor valor del último bloque y revierte los montos.
+     * Complejidad: O(log n + log P)
+     */
+    public void hackearTx() {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (ultimoBloque == null) return;</span>
+        
+        // Obtener y eliminar la transacción de mayor valor - O(log n)
+<span class="fc" id="L92">        Transaccion hackeada = ultimoBloque.eliminarMayorValor();</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (hackeada == null) return;</span>
+        
+        // Revertir los efectos de la transacción en los usuarios - O(log P)
+<span class="fc" id="L96">        Transaccion.revertirTransaccion(usuarios, hackeada, usuariosArray);</span>
+<span class="fc" id="L97">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

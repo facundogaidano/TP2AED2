@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Heap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tp2</a> &gt; <a href="index.source.html" class="el_package">aed</a> &gt; <span class="el_source">Heap.java</span></div><h1>Heap.java</h1><pre class="source lang-java linenums">package aed;
+import java.util.ArrayList;
+
+/**
+ * Implementación de un heap máximo genérico.
+ * Optimizado para acceso O(1) a elementos Usuario mediante índices internos.
+ * No utiliza un Handle externo, cada Usuario tiene su propio índice en el heap.
+ */
+public class Heap&lt;T extends Comparable&lt;T&gt;&gt; {
+    private ArrayList&lt;T&gt; heap;                  // Lista que almacena los elementos del heap
+    private ArrayList&lt;Integer&gt; listaHandle;     // Lista de índices para acceso O(1) a elementos Usuario
+
+
+    /**
+     * Constructor que inicializa un heap vacío con la capacidad especificada.
+     * Complejidad: O(1)
+     */
+<span class="fc" id="L18">    public Heap(int capacidadInicial) {</span>
+<span class="fc" id="L19">        heap = new ArrayList&lt;&gt;(capacidadInicial);</span>
+<span class="fc" id="L20">        listaHandle = new ArrayList&lt;&gt;();</span>
+        // Initialize with enough capacity
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        for (int i = 0; i &lt; capacidadInicial + 1; i++) {</span>
+<span class="fc" id="L23">            listaHandle.add(-1);</span>
+        }
+<span class="fc" id="L25">    }</span>
+
+    /**
+     * Constructor que crea un heap a partir de una lista de elementos.
+     * Utiliza el algoritmo de Floyd para construcción en tiempo lineal.
+     * https://www.cubawiki.com.ar/images/e/e3/AED2_apunte_final_2021.pdf (página 37).
+     * Complejidad: O(n)
+     */
+<span class="fc" id="L33">    public Heap(ArrayList&lt;T&gt; elementos) {</span>
+<span class="fc" id="L34">        int n = elementos.size();</span>
+<span class="fc" id="L35">        this.heap = new ArrayList&lt;&gt;(n);</span>
+        
+        // Recorrido 1: Encontrar maxId mientras copiamos elementos - O(n)
+<span class="fc" id="L38">        int maxId = 0;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (T elemento : elementos) {</span>
+<span class="fc" id="L40">            heap.add(elemento);</span>
+            
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (elemento instanceof Usuario) {</span>
+<span class="fc" id="L43">                maxId = Math.max(maxId, ((Usuario)elemento).getId());</span>
+            }
+        }
+        
+        // Inicializar listaHandle con capacidad conocida de una sola vez - O(n)
+<span class="fc" id="L48">        this.listaHandle = new ArrayList&lt;&gt;(maxId + 1);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (int i = 0; i &lt;= maxId; i++) {</span>
+<span class="fc" id="L50">            listaHandle.add(-1);</span>
+        }
+        
+        // Mapear posiciones de Usuarios directo - evitamos verificación instanceof redundante - O(n)
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L55">            T elemento = heap.get(i);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (elemento instanceof Usuario) {</span>
+<span class="fc" id="L57">                Usuario u = (Usuario)elemento;</span>
+<span class="fc" id="L58">                listaHandle.set(u.getId(), i);</span>
+            }
+        }
+
+        // Construir el heap usando el algoritmo de Floyd - O(n)
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (int i = heap.size() / 2 - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L64">            heapifyDown(i);</span>
+        }
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Agrega un elemento al heap y mantiene la propiedad de heap.
+     * Complejidad: O(log n)
+     */
+    public void agregarAlHeap(T elemento) {
+<span class="fc" id="L73">        heap.add(elemento);</span>
+<span class="fc" id="L74">        int indice = heap.size() - 1;</span>
+
+        // Si es un Usuario, almacenar su posición para acceso - O(1)
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (elemento instanceof Usuario) {</span>
+<span class="fc" id="L78">            Usuario u = (Usuario) elemento;</span>
+            
+<span class="fc" id="L80">            listaHandle.set(u.getId(), indice);</span>
+        }
+
+<span class="fc" id="L83">        heapifyUp(indice);</span>
+<span class="fc" id="L84">    }</span>
+    
+    /**
+     * Extrae y devuelve el elemento máximo del heap.
+     * Complejidad: O(log n)
+     */
+    public T sacarMaximo() {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (heap.isEmpty()) {</span>
+<span class="fc" id="L92">            throw new IllegalStateException(&quot;Heap vacío&quot;);</span>
+        }
+<span class="fc" id="L94">        T maxElem = heap.get(0);</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (maxElem instanceof Usuario) {</span>
+<span class="fc" id="L97">            listaHandle.set(((Usuario)maxElem).getId(), -1); // Ya no está en el heap</span>
+        }
+
+<span class="fc" id="L100">        T ultimoElemento = heap.remove(heap.size() - 1);</span>
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (!heap.isEmpty()) {</span>
+<span class="fc" id="L103">            heap.set(0, ultimoElemento);</span>
+            
+            // Actualizar índice si es Usuario.
+<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (ultimoElemento instanceof Usuario) {</span>
+<span class="fc" id="L107">                listaHandle.set(((Usuario) ultimoElemento).getId(), 0);</span>
+            }
+            
+            // Reorganizar el heap hacia abajo desde la raíz. - O(log n)
+<span class="fc" id="L111">            heapifyDown(0);</span>
+        }
+        
+<span class="fc" id="L114">        return maxElem;</span>
+    }
+
+    /**
+     * Reorganiza el heap hacia arriba desde la posición indicada.
+     * Complejidad: O(log n)
+     */
+    private void heapifyUp(int indice) {
+<span class="fc" id="L122">        T elemento = heap.get(indice);</span>
+        
+        // Bucle para subir el elemento hasta su posición correcta - O(log n)
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        while (indice &gt; 0) {</span>
+<span class="fc" id="L126">            int indicePadre = (indice - 1) / 2;</span>
+<span class="fc" id="L127">            T padre = heap.get(indicePadre);</span>
+            
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if (elemento.compareTo(padre) &lt;= 0) {</span>
+<span class="fc" id="L130">                break;</span>
+            }
+            
+            // Intercambiar con padre
+<span class="fc" id="L134">            heap.set(indice, padre);</span>
+<span class="fc" id="L135">            heap.set(indicePadre, elemento);</span>
+            
+            // Actualizar índices si son Usuarios
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (padre instanceof Usuario) {</span>
+<span class="fc" id="L139">                listaHandle.set(((Usuario) padre).getId(), indice);</span>
+            }
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (elemento instanceof Usuario) {</span>
+<span class="fc" id="L142">                listaHandle.set(((Usuario) elemento).getId(), indicePadre);</span>
+            }
+            
+<span class="fc" id="L145">            indice = indicePadre;</span>
+        }
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * Reorganiza el heap hacia abajo desde la posición indicada.
+     * Complejidad: O(log n)
+     */
+    private void heapifyDown(int indice) {
+<span class="fc" id="L154">        int tamaño = heap.size();</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (indice &gt;= tamaño) return;</span>
+        
+<span class="fc" id="L157">        T elemento = heap.get(indice);</span>
+        
+        // Bucle para bajar el elemento hasta su posición correcta - O(log n)
+<span class="fc" id="L160">        while (true) {</span>
+<span class="fc" id="L161">            int hijoIzquierdoId = 2 * indice + 1;</span>
+<span class="fc" id="L162">            int hijoDerechoId = 2 * indice + 2;</span>
+<span class="fc" id="L163">            int idDelMasLargo = indice;</span>
+            
+            // Verificar hijo izquierdo
+<span class="fc bfc" id="L166" title="All 4 branches covered.">            if (hijoIzquierdoId &lt; tamaño &amp;&amp; heap.get(hijoIzquierdoId).compareTo(heap.get(idDelMasLargo)) &gt; 0) {</span>
+<span class="fc" id="L167">                idDelMasLargo = hijoIzquierdoId;</span>
+            }
+            
+            // Verificar hijo derecho
+<span class="fc bfc" id="L171" title="All 4 branches covered.">            if (hijoDerechoId &lt; tamaño &amp;&amp; heap.get(hijoDerechoId).compareTo(heap.get(idDelMasLargo)) &gt; 0) {</span>
+<span class="fc" id="L172">                idDelMasLargo = hijoDerechoId;</span>
+            }
+            
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (idDelMasLargo == indice) {</span>
+<span class="fc" id="L176">                break; // El elemento está en su posición correcta</span>
+            }
+            
+            // Intercambiar con el hijo mayor
+<span class="fc" id="L180">            T masLargo = heap.get(idDelMasLargo);</span>
+<span class="fc" id="L181">            heap.set(idDelMasLargo, elemento);</span>
+<span class="fc" id="L182">            heap.set(indice, masLargo);</span>
+            
+            // Actualizar índices si son Usuarios
+<span class="fc bfc" id="L185" title="All 2 branches covered.">            if (elemento instanceof Usuario) {</span>
+<span class="fc" id="L186">                listaHandle.set(((Usuario) elemento).getId(), idDelMasLargo);</span>
+            }
+<span class="fc bfc" id="L188" title="All 2 branches covered.">            if (masLargo instanceof Usuario) {</span>
+<span class="fc" id="L189">                listaHandle.set(((Usuario) masLargo).getId(), indice);</span>
+            }
+            
+<span class="fc" id="L192">            indice = idDelMasLargo;</span>
+        }
+<span class="fc" id="L194">    }</span>
+
+    /**
+     * Actualiza la posición de un Usuario en el heap tras un cambio de prioridad.
+     * Utiliza acceso directo O(1) al índice almacenado en el Usuario.
+     * Complejidad: O(log P)
+     */
+    public void actualizarPosicionUsuario(Usuario usuario) {
+<span class="fc" id="L202">        int id = usuario.getId();</span>
+
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        while (listaHandle.size() &lt;= id) {</span>
+<span class="nc" id="L205">            listaHandle.add(-1);</span>
+        }
+
+<span class="fc" id="L208">        int indice = listaHandle.get(id);</span>
+        
+<span class="pc bpc" id="L210" title="3 of 6 branches missed.">        if (indice &gt;= 0 &amp;&amp; indice &lt; heap.size() &amp;&amp; heap.get(indice) instanceof Usuario) {</span>
+            // Si el usuario está en el heap, reorganizar hacia arriba y abajo - O(log P)
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">            if (heap.get(indice) == usuario) {</span>
+<span class="fc" id="L213">                heapifyUp(indice);</span>
+                // Obtener nuevo índice después de heapifyUp
+<span class="fc" id="L215">                indice = listaHandle.get(id);</span>
+<span class="fc" id="L216">                heapifyDown(indice);</span>
+            }
+        }
+<span class="fc" id="L219">    }</span>
+
+    /**
+     * Devuelve el elemento máximo del heap sin extraerlo.
+     * Complejidad: O(1)
+     */
+    public T getMaximo() {
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (heap.isEmpty()) { return null; }</span>
+<span class="fc" id="L227">        return heap.get(0);</span>
+    }
+
+    /**
+     * Devuelve el número de elementos en el heap.
+     * Complejidad: O(1)
+     */
+<span class="fc" id="L234">    public int getLongitud() { return heap.size(); }</span>
+
+    public class Handle {
+        private int indice;
+
+<span class="nc" id="L239">        public Handle(int indice) {</span>
+<span class="nc" id="L240">            this.indice = indice;</span>
+<span class="nc" id="L241">        }</span>
+
+        public int getIndice() {
+<span class="nc" id="L244">            return indice;</span>
+        }
+
+        public void setIndice(int indice) {
+<span class="nc" id="L248">            this.indice = indice;</span>
+<span class="nc" id="L249">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
