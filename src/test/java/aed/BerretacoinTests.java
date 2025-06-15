@@ -433,10 +433,108 @@ public class BerretacoinTests {
         System.out.println("Tiempo de Stress -> " + (end - start) + "ms"); // Nuevo
     }
 
-    // Casos de prueba de complejidad
+    // Casos de prueba que consideramos que faltaban
 
     @Test
-    void testNuevoBerretacoinEsO_P() {
+    public void hackearBloqueVacioOYaVacio() {
+        Berretacoin sistema = new Berretacoin(5);
+        
+        sistema.hackearTx();
+        
+        Transaccion[] bloque = {new Transaccion(0, 0, 1, 1)};
+        sistema.agregarBloque(bloque);
+        sistema.hackearTx();
+        sistema.hackearTx();
+        
+        assertEquals(0, sistema.txUltimoBloque().length);
+    }
+
+    @Test
+    public void transaccionesConMontosExtremos() {
+        Berretacoin sistema = new Berretacoin(3);
+        Transaccion[] bloque = {
+            new Transaccion(0, 0, 1, Integer.MAX_VALUE),
+            new Transaccion(1, 1, 2, Integer.MAX_VALUE - 1)
+        };
+        sistema.agregarBloque(bloque);
+        
+        assertEquals(Integer.MAX_VALUE - 1, sistema.montoMedioUltimoBloque());
+        assertEquals(2, sistema.maximoTenedor());
+    }
+
+    @Test
+    public void transaccionesCirculares() {
+        Berretacoin sistema = new Berretacoin(3);
+        Transaccion[] bloque = {
+            new Transaccion(0, 0, 1, 10), // 1 tiene 10
+            new Transaccion(1, 1, 2, 5),  // 1 tiene 5, 2 tiene 5
+            new Transaccion(2, 2, 3, 3),  // 1 tiene 5, 2 tiene 2, 3 tiene 3
+            new Transaccion(3, 3, 1, 2)   // 1 tiene 7, 2 tiene 2, 3 tiene 1
+        };
+        sistema.agregarBloque(bloque);
+        
+        assertEquals(1, sistema.maximoTenedor());
+        assertEquals(4, sistema.txUltimoBloque().length);
+        
+        sistema.hackearTx();
+        assertEquals(2, sistema.maximoTenedor());
+    }
+
+    @Test
+    public void consistenciaTrasOperacionesMixtas() {
+        Berretacoin sistema = new Berretacoin(5);
+        for (int i = 0; i < 10; i++) {
+            // Alternar entre agregar y hackear
+            Transaccion[] bloque = new Transaccion[i+1];
+            for (int j = 0; j <= i; j++) {
+                bloque[j] = new Transaccion(j, 0, (j % 5) + 1, j+1);
+            }
+            sistema.agregarBloque(bloque);
+            
+            if (i % 2 == 0) {
+                sistema.hackearTx();
+            }
+            
+            int maxTenedor = sistema.maximoTenedor();
+            assertTrue(maxTenedor >= 1 && maxTenedor <= 5);
+        }
+    }
+
+    @Test
+    public void txUltimoBloqueDevuelveCopia() {
+        Berretacoin sistema = new Berretacoin(3);
+        Transaccion[] bloqueOriginal = {
+            new Transaccion(0, 0, 1, 10),
+            new Transaccion(1, 1, 2, 5)
+        };
+        sistema.agregarBloque(bloqueOriginal);
+
+        Transaccion[] copiaObtenida = sistema.txUltimoBloque();
+        assertEquals(bloqueOriginal.length, copiaObtenida.length);
+        assertTrue(Arrays.equals(bloqueOriginal, copiaObtenida));
+
+        if (copiaObtenida.length > 0) {
+            Transaccion primeraTransaccionOriginalEnCopia = new Transaccion(
+                copiaObtenida[0].id(), 
+                copiaObtenida[0].id_comprador(), 
+                copiaObtenida[0].id_vendedor(), 
+                copiaObtenida[0].monto()
+            );
+            
+            copiaObtenida[0] = new Transaccion(999, 999, 999, 9999);
+
+            Transaccion[] bloqueInternoPostModificacionCopia = sistema.txUltimoBloque();
+            
+            assertEquals(bloqueOriginal.length, bloqueInternoPostModificacionCopia.length);
+            
+            assertEquals(primeraTransaccionOriginalEnCopia, bloqueInternoPostModificacionCopia[0]);
+        }
+    }
+
+    // Casos de prueba de tiempo
+
+    @Test
+    void testDeTiempoNuevoBerretacoin() {
         int[] casos = {1000, 10000, 100000, 1000000};
         for (int idx = 0; idx < casos.length; idx++) {
             int n = casos[idx];
@@ -450,7 +548,7 @@ public class BerretacoinTests {
     }
 
     @Test
-    void testAgregarBloqueO_nLogP() {
+    void testDeTiempoAgregarBloque() {
         int[] usuariosArray = {1000, 10000, 100000, 1000000};
         int[] transaccionesArray = {1000, 10000, 100000, 1000000};
 
@@ -472,7 +570,7 @@ public class BerretacoinTests {
     }
 
     @Test
-    void testTxUltimoBloqueEsO_n() {
+    void testDeTiempoTxUltimoBloque() {
         int[] casos = {1000, 10000, 100000, 1000000};
         for (int id = 0; id < casos.length; id++) {
             int n = casos[id];
@@ -491,7 +589,7 @@ public class BerretacoinTests {
     }
 
     @Test
-    void testMaximoTenedorEsO_1() {
+    void testDeTiempoMaximoTenedor() {
         int[] casos = {1000, 10000, 100000, 1000000};
         for (int id = 0; id < casos.length; id++) {
             int n = casos[id];
@@ -511,7 +609,7 @@ public class BerretacoinTests {
     }
     
     @Test
-    void testMontoMedioUltimoBloqueEsO_1() {
+    void testDeTiempoMontoMedioUltimoBloque() {
         int[] casos = {1000, 10000, 100000, 1000000};
         for (int id = 0; id < casos.length; id++) {
             int n = casos[id];
@@ -531,7 +629,7 @@ public class BerretacoinTests {
     }
 
     @Test
-    void testHackearTxEsO_logNxP() {
+    void testDeTiempoHackearTx() {
         int[] usuariosArray = {1000, 10000, 100000, 1000000};
         int[] transaccionesArray = {1000, 10000, 100000, 1000000};
 
