@@ -24,62 +24,25 @@ public class Transaccion implements Comparable<Transaccion> {
     }
 
     /**
-     * Aplica un conjunto de transacciones a los usuarios afectados y actualiza el heap.
-     * Complejidad: O(n + K log P) donde K es el número de usuarios afectados.
-     * Peor caso: O(n log P) si K = n.
+     * Obtiene los usuarios afectados por esta transacción.
+     * Complejidad: O(1)
      */
-    public static void aplicarTransacciones(Heap<Usuario> heap, Transaccion[] transacciones, Usuario[] usuariosArray) {
-        // Registro de usuarios modificados para actualizar su prioridad.
-        boolean[] usuariosActualizados = new boolean[usuariosArray.length];
-        ArrayList<Usuario> usuariosAfectados = new ArrayList<>(); // Es para almacenar los usuarios a actualizar en el heap.
-        
-        // Aplicar todas las transacciones y actualizar balances - O(n)
-        for (int i = 0; i < transacciones.length; i++) {
-            Transaccion trx = transacciones[i];
-            if (trx.id_comprador() != 0) {
-                Usuario comprador = usuariosArray[trx.id_comprador()];
-                comprador.agregarBalance(-trx.monto());
-                
-                // Si el usuario no fue actualizado, el valor de su indice en usuariosActualizados sera False, entonces
-                // lo actualizamos a True.
-                if (!usuariosActualizados[trx.id_comprador()]) {
-                    usuariosActualizados[trx.id_comprador()] = true;
-                    usuariosAfectados.add(comprador); // Los agrega a lista de usuarios a actualizar.
-                }
-            }
-            
-            Usuario vendedor = usuariosArray[trx.id_vendedor()];
-            vendedor.agregarBalance(trx.monto());
+    public ArrayList<Usuario> usuariosAfectados(Usuario[] usuariosArray) {
+        ArrayList<Usuario> usuariosAfectados = new ArrayList<>(2); // Máximo son 2 los usuarios involucrados. O(1)
 
-            // Repetimos la misma logica que para los usuarios compradores.
-            if (!usuariosActualizados[trx.id_vendedor()]) { // O(1)
-                usuariosActualizados[trx.id_vendedor()] = true;
-                usuariosAfectados.add(vendedor); // Los agrega a lista de usuarios a actualizar.
+        if (id_comprador != 0) {
+            Usuario comprador = usuariosArray[id_comprador];
+            if (!usuariosAfectados.contains(comprador)) { // Verificar si ya está en la lista
+                usuariosAfectados.add(comprador);
             }
         }
         
-        // Actualizar el heap solo para los usuarios en la lista - O(K log P)
-        for (int i = 0; i < usuariosAfectados.size(); i++) {
-            Usuario usuario = usuariosAfectados.get(i);
-            heap.actualizarPosicionUsuario(usuario);
+        Usuario vendedor = usuariosArray[id_vendedor];
+        if (!usuariosAfectados.contains(vendedor)) { // Verificar si ya está en la lista
+            usuariosAfectados.add(vendedor);
         }
-    }
 
-    /**
-     * Revierte los balances de los usuarios involucrados en la última transacción de mayor valor.
-     * Complejidad: O(log P)
-     */
-    public static void revertirTransaccion(Heap<Usuario> heap, Transaccion trx, Usuario[] usuariosArray) {
-        if (trx.id_comprador() != 0) {
-            Usuario comprador = usuariosArray[trx.id_comprador()];
-            comprador.agregarBalance(trx.monto());
-            heap.actualizarPosicionUsuario(comprador);
-        }
-        
-        Usuario vendedor = usuariosArray[trx.id_vendedor()];
-        vendedor.agregarBalance(-trx.monto());
-        heap.actualizarPosicionUsuario(vendedor);
-        
+        return usuariosAfectados;
     }
 
     /**

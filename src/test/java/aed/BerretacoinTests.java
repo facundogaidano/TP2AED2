@@ -303,7 +303,8 @@ public class BerretacoinTests {
         
         assertEquals(tracker.getMaximoTenedor(), berretacoin.maximoTenedor());
     }
-
+//87 88 89 90 91 92
+//116(2-3) 126(1-1) 125(0-4) 124(0-2) 123(0-5) 122(0-6) 121 120 119 118
     @Test
     public void hackearConVariosBloques(){
         Transaccion[] transacciones3_hackeadas = new Transaccion[] {
@@ -543,7 +544,7 @@ public class BerretacoinTests {
             long end = System.nanoTime();
             System.out.println("nuevoBerretacoin(" + n + ") -> " + (end - start) + "ns");
             // Verifica que el sistema se crea correctamente
-            assert sistema.maximoTenedor() == 1 : "El máximo tenedor inicial debe ser 1";
+            assertEquals(1, sistema.maximoTenedor());
         }
     }
 

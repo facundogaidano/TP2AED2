@@ -3,12 +3,33 @@ import java.util.ArrayList;
 
 /**
  * Implementación de un heap máximo genérico.
- * Optimizado para acceso O(1) a elementos Usuario mediante handles internos.
  */
 public class Heap<T extends Comparable<T>> {
-    private ArrayList<T> heap;                  // Lista que almacena los elementos del heap
+    private ArrayList<Par> heap;                  // Lista que almacena los elementos del heap
     private ArrayList<Handle> listaHandle;      // Lista de handles para acceso O(1) a ID Usuario
 
+
+    /**
+     * Clase interna para manejar los elementos del heap.
+     * Almacena el valor y el índice del elemento en el heap.
+     */
+    public class Par {
+        T valor;
+        int indice;
+        
+        Par(T v, int i){
+            valor = v;
+            indice = i;
+        }
+
+        public int getIndice() {
+            return this.indice;
+        }
+
+        public T getValor() {
+            return this.valor;
+        }
+    }
 
     /**
      * Constructor que inicializa un heap vacío con la capacidad especificada.
@@ -22,6 +43,8 @@ public class Heap<T extends Comparable<T>> {
         }
     }
 
+    // 
+
     /**
      * Constructor que crea un heap a partir de una lista de elementos.
      * Utiliza el algoritmo de Floyd para construcción en tiempo lineal.
@@ -33,28 +56,10 @@ public class Heap<T extends Comparable<T>> {
         this.heap = new ArrayList<>(n);
         
         // Recorrido 1: Encontrar maxId mientras copiamos elementos - O(n)
-        int maxId = 0;
-        for (T elemento : elementos) {
-            heap.add(elemento);
-            
-            if (elemento instanceof Usuario) {
-                maxId = Math.max(maxId, ((Usuario)elemento).getId());
-            }
-        }
-        
-        // Inicializar listaHandle con capacidad conocida de una sola vez - O(n)
-        this.listaHandle = new ArrayList<>(maxId + 1);
-        for (int i = 0; i <= maxId; i++) {
-            listaHandle.add(new Handle(-1));
-        }
-        
-        // Mapear posiciones de Usuarios directo - evitamos verificación instanceof redundante - O(n)
+        this.listaHandle = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
-            T elemento = heap.get(i);
-            if (elemento instanceof Usuario) {
-                Usuario u = (Usuario)elemento;
-                listaHandle.get(u.getId()).setIndice(i);
-            }
+            listaHandle.add(new Handle(i));
+            heap.add(new Par(elementos.get(i), i));
         }
 
         // Construir el heap usando el algoritmo de Floyd - O(n)
@@ -67,63 +72,54 @@ public class Heap<T extends Comparable<T>> {
      * Agrega un elemento al heap y mantiene la propiedad de heap.
      * Complejidad: O(log n)
      */
-    public void agregarAlHeap(T elemento) {
-        heap.add(elemento);
-        int indice = heap.size() - 1;
-
-        // Si es un Usuario, almacenar su posición para acceso - O(1)
-        if (elemento instanceof Usuario) {
-            Usuario u = (Usuario) elemento;
-            
-            listaHandle.get(u.getId()).setIndice(indice);
+    public void agregar(T elemento, int handleId) {
+        int indiceEnHeap = heap.size();
+        heap.add(new Par(elemento, handleId));
+        
+        // Asegurar que listaHandle tenga capacidad
+        while (listaHandle.size() <= handleId) {
+            listaHandle.add(new Handle(-1));
         }
-
-        heapifyUp(indice);
+        listaHandle.get(handleId).setIndice(indiceEnHeap);
+        heapifyUp(indiceEnHeap);
     }
     
     /**
      * Extrae y devuelve el elemento máximo del heap.
      * Complejidad: O(log n)
-     */
+     */    
     public T sacarMaximo() {
         if (heap.isEmpty()) {
             throw new IllegalStateException("Heap vacío");
         }
 
-        T maxElem = heap.get(0);
-        if (maxElem instanceof Usuario) {
-            listaHandle.get(((Usuario) maxElem).getId()).setIndice(-1); // Ya no está en el heap
-        }
+        // Guardar el elemento máximo (raíz del heap)
+        // y reemplazarlo con el último elemento del heap.
+        Par maxElemento = heap.get(0);
+        Par ultimoElemento = heap.remove(heap.size() - 1);
 
-        T ultimoElemento = heap.remove(heap.size() - 1);
         if (!heap.isEmpty()) {
             heap.set(0, ultimoElemento);
-            
-            // Actualizar índice si es Usuario.
-            if (ultimoElemento instanceof Usuario) {
-                listaHandle.get(((Usuario) ultimoElemento).getId()).setIndice(0);
-            }
-            
-            // Reorganizar el heap hacia abajo desde la raíz. - O(log n)
             heapifyDown(0);
         }
-        
-        return maxElem;
+
+        return maxElemento.getValor();
     }
+
 
     /**
      * Reorganiza el heap hacia arriba desde la posición indicada.
      * Complejidad: O(log n)
      */
     private void heapifyUp(int indice) {
-        T elemento = heap.get(indice);
+        Par elemento = heap.get(indice);
         
         // Bucle para subir el elemento hasta su posición correcta - O(log n)
         while (indice > 0) {
             int indicePadre = (indice - 1) / 2;
-            T padre = heap.get(indicePadre);
+            Par padre = heap.get(indicePadre);
             
-            if (elemento.compareTo(padre) <= 0) {
+            if (elemento.getValor().compareTo(padre.getValor()) <= 0) {
                 break;
             }
             
@@ -132,12 +128,10 @@ public class Heap<T extends Comparable<T>> {
             heap.set(indicePadre, elemento);
             
             // Actualizar índices si son Usuarios
-            if (padre instanceof Usuario) {
-                listaHandle.get(((Usuario) padre).getId()).setIndice(indice);
-            }
-            if (elemento instanceof Usuario) {
-                listaHandle.get(((Usuario) elemento).getId()).setIndice(indicePadre);
-            }
+            listaHandle.get(padre.getIndice()).setIndice(indice);
+            
+            listaHandle.get(elemento.getIndice()).setIndice(indicePadre);
+            
             
             indice = indicePadre;
         }
@@ -151,7 +145,7 @@ public class Heap<T extends Comparable<T>> {
         int tamaño = heap.size();
         if (indice >= tamaño) return;
         
-        T elemento = heap.get(indice);
+        Par elemento = heap.get(indice);
         
         // Bucle para bajar el elemento hasta su posición correcta - O(log n)
         while (true) {
@@ -160,12 +154,12 @@ public class Heap<T extends Comparable<T>> {
             int raizId = indice;
             
             // Verificar hijo izquierdo
-            if (hijoIzquierdoId < tamaño && heap.get(hijoIzquierdoId).compareTo(heap.get(raizId)) > 0) {
+            if (hijoIzquierdoId < tamaño && heap.get(hijoIzquierdoId).getValor().compareTo(heap.get(raizId).getValor()) > 0) {
                 raizId = hijoIzquierdoId;
             }
             
             // Verificar hijo derecho
-            if (hijoDerechoId < tamaño && heap.get(hijoDerechoId).compareTo(heap.get(raizId)) > 0) {
+            if (hijoDerechoId < tamaño && heap.get(hijoDerechoId).getValor().compareTo(heap.get(raizId).getValor()) > 0) {
                 raizId = hijoDerechoId;
             }
             
@@ -174,42 +168,35 @@ public class Heap<T extends Comparable<T>> {
             }
             
             // Intercambiar con el hijo mayor
-            T raizIdCopia = heap.get(raizId);
+            Par raizIdCopia = heap.get(raizId);
             heap.set(raizId, elemento);
             heap.set(indice, raizIdCopia);
             
-            // Actualizar índices si son Usuarios
-            if (elemento instanceof Usuario) {
-                listaHandle.get(((Usuario) elemento).getId()).setIndice(raizId);
-            }
-            if (raizIdCopia instanceof Usuario) {
-                listaHandle.get(((Usuario) raizIdCopia).getId()).setIndice(indice);
-            }
+            // Actualizar índices
+            listaHandle.get(elemento.getIndice()).setIndice(raizId);
+            listaHandle.get(raizIdCopia.getIndice()).setIndice(indice);
             
             indice = raizId;
         }
     }
 
     /**
-     * Actualiza la posición de un Usuario en el heap tras un cambio de prioridad.
-     * Utiliza acceso directo O(1) al índice almacenado en el Usuario.
+     * Actualiza la posición de un Elemento en el heap tras un cambio de prioridad.
      * Complejidad: O(log P)
      */
-    public void actualizarPosicionUsuario(Usuario usuario) {
-        int id = usuario.getId();
-        while (listaHandle.size() <= id) {
-            listaHandle.add(new Handle(-1));
+    public void actualizarPosicion(int indiceHandle) {
+        if (indiceHandle < 0 || indiceHandle >= listaHandle.size()) {
+            return;
         }
 
-        int indice = listaHandle.get(id).getIndice();
-        if (indice >= 0 && indice < heap.size() && heap.get(indice) instanceof Usuario) {
-            // Si el usuario está en el heap, reorganizar hacia arriba y abajo - O(log P)
-            if (heap.get(indice) == usuario) {
-                heapifyUp(indice);
-                // Obtener nuevo índice después de heapifyUp
-                indice = listaHandle.get(id).getIndice();
-                heapifyDown(indice);
-            }
+        // Obtener el índice del elemento en el heap usando el handle
+        int indice = listaHandle.get(indiceHandle).getIndice();
+        if (indice >= 0 && indice < heap.size()) {
+            // Si está en el heap, reorganizar hacia arriba y abajo - O(log P)
+            heapifyUp(indice);
+            // Obtener nuevo índice después de heapifyUp
+            indice = listaHandle.get(indiceHandle).getIndice();
+            heapifyDown(indice);
         }
     }
 
@@ -219,7 +206,7 @@ public class Heap<T extends Comparable<T>> {
      */
     public T getMaximo() {
         if (heap.isEmpty()) { return null; }
-        return heap.get(0);
+        return heap.get(0).getValor();
     }
 
     /**

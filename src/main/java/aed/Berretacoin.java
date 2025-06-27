@@ -19,17 +19,40 @@ public class Berretacoin {
     public Berretacoin(int n_usuarios){
         // Array de usuarios indexado desde 1.
         this.usuariosArray = new Usuario[n_usuarios + 1]; 
+        this.usuarios = new Heap<>(n_usuarios);
 
         // Inicializar todos los usuarios con balance cero - O(P)
-        ArrayList<Usuario> listaUsuarios = new ArrayList<>();
         for (int i = 0; i < n_usuarios; i++) {
             Usuario user = new Usuario(i + 1);
             usuariosArray[i + 1] = user;
-            listaUsuarios.add(user);
+            usuarios.agregar(user, user.getId());
         }
+    }
 
-        // Crear el heap de usuarios con los usuarios inicializados - O(P)
-        this.usuarios = new Heap<>(listaUsuarios);
+    /**
+     * Actualiza las posiciones de los usuarios en el heap después de cambios en sus balances.
+     * Complejidad: O(log P)
+     */
+    private void actualizarPosicionesUsuarios(ArrayList<Usuario> usuariosAfectados) {
+        for (int i = 0; i < usuariosAfectados.size(); i++) { // O(1) máximo de usuarios afectados son 2.
+            Usuario usuario = usuariosAfectados.get(i);
+            usuarios.actualizarPosicion(usuario.getId()); // O(log p)
+        }
+    }
+
+    /**
+     * Revierte los balances de los usuarios involucrados en la última transacción de mayor valor.
+     * Complejidad: O(log P)
+     */
+    private static void revertirTransaccion(Transaccion trx, Usuario[] usuariosArray) {
+
+        if (trx.id_comprador() != 0) {
+            Usuario comprador = usuariosArray[trx.id_comprador()];
+            comprador.agregarBalance(trx.monto());
+        }
+        
+        Usuario vendedor = usuariosArray[trx.id_vendedor()];
+        vendedor.agregarBalance(-trx.monto());
     }
 
     /**
@@ -41,8 +64,26 @@ public class Berretacoin {
         Bloque bloque = new Bloque(transacciones);
         this.ultimoBloque = bloque;
         
-        // Aplicar transacciones y actualizar balances de usuarios - O(n * log P)
-        Transaccion.aplicarTransacciones(usuarios, transacciones, usuariosArray);
+        // Aplicar transacciones y actualizar balances de usuarios - O(n)
+        for (int i = 0; i < transacciones.length; i++) {
+            Transaccion trx = transacciones[i];
+            if (trx.id_comprador() != 0) {
+                Usuario comprador = usuariosArray[trx.id_comprador()];
+                comprador.agregarBalance(-trx.monto());
+            }
+            
+            Usuario vendedor = usuariosArray[trx.id_vendedor()];
+            vendedor.agregarBalance(trx.monto());
+        }
+
+        for (int i = 0; i < transacciones.length; i++) { // O(n * log P)
+            Transaccion trx = transacciones[i];
+            // Obtener usuarios afectados por la transacción
+            ArrayList<Usuario> usuariosAfectados = trx.usuariosAfectados(usuariosArray);
+            
+            // Actualizar posiciones de los usuarios afectados en el heap - O(log P)
+            actualizarPosicionesUsuarios(usuariosAfectados);
+        }
     }
 
     /**
@@ -93,6 +134,12 @@ public class Berretacoin {
         if (hackeada == null) return;
         
         // Revertir los efectos de la transacción en los usuarios - O(log P)
-        Transaccion.revertirTransaccion(usuarios, hackeada, usuariosArray);
+        revertirTransaccion(hackeada, usuariosArray);
+
+        // Obtener los usuarios afectados por la transacción hackeada - O(1)
+        ArrayList<Usuario> usuariosAfectados = hackeada.usuariosAfectados(usuariosArray);
+    
+        // Actualizar posiciones en el heap - O(log P)
+        actualizarPosicionesUsuarios(usuariosAfectados);
     }
 }
