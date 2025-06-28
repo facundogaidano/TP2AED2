@@ -67,7 +67,7 @@ public class Heap<T extends Comparable<T>> {
      * Agrega un elemento al heap y mantiene la propiedad de heap.
      * Complejidad: O(log n)
      */
-    public void agregar(T elemento, int handleId) {
+    public void agregarElemento(T elemento, int handleId) {
         int indiceEnHeap = heap.size();
         heap.add(new Par(elemento, handleId));
         listaHandle.get(handleId).setIndice(indiceEnHeap);

@@ -33,7 +33,7 @@ public class HeapTests {
   @Test
   void testHeapUnElemento() {
     // Caso borde: heap con un único elemento
-    heapInt.agregar(42, 0);
+    heapInt.agregarElemento(42, 0);
     
     assertEquals(1, heapInt.getLongitud(), "El heap debe tener 1 elemento");
     assertEquals(42, heapInt.getMaximo(), "El máximo debe ser 42");
@@ -73,11 +73,11 @@ public class HeapTests {
       Heap<Integer> heap = new Heap<>(n);
       
       for (int i = 0; i < n-1; i++) {
-        heap.agregar(i, i);
+        heap.agregarElemento(i, i);
       }
       
       long start = System.nanoTime();
-      heap.agregar(n, n);
+      heap.agregarElemento(n, n);
       long end = System.nanoTime();
       
       System.out.println("agregar() con " + n + " elementos -> " + (end - start) + "ns");
@@ -97,10 +97,10 @@ public class HeapTests {
   void testElementosNegativos() {
     // Caso borde: valores negativos
     Heap<Integer> heap = new Heap<>(10);
-    heap.agregar(-1, 0);
-    heap.agregar(-10, 1);
-    heap.agregar(-5, 2);
-    heap.agregar(-3, 3);
+    heap.agregarElemento(-1, 0);
+    heap.agregarElemento(-10, 1);
+    heap.agregarElemento(-5, 2);
+    heap.agregarElemento(-3, 3);
     
     assertEquals(-1, heap.sacarMaximo(), "El mayor valor negativo es -1");
     assertEquals(-3, heap.sacarMaximo(), "El siguiente es -3");

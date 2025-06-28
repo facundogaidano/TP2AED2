@@ -74,7 +74,7 @@ public class Bloque {
             nuevaLista.add(c, it.siguiente());
             c++;
         }
-        // 
+         
         return nuevaLista.toArray(new Transaccion[0]);
     }
 

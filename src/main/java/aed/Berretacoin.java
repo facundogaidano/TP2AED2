@@ -25,7 +25,7 @@ public class Berretacoin {
         for (int i = 0; i < n_usuarios; i++) { // O(P)
             Usuario user = new Usuario(i + 1);
             usuariosArray[i + 1] = user;
-            usuarios.agregar(user, user.getId()); // O(1)
+            usuarios.agregarElemento(user, user.getId()); // O(1)
         }
 
         // Construir el heap de usuarios - O(P)
@@ -45,7 +45,7 @@ public class Berretacoin {
 
     /**
      * Revierte los balances de los usuarios involucrados en la última transacción de mayor valor.
-     * Complejidad: O(log P)
+     * Complejidad: O(1)
      */
     private static void revertirTransaccion(Transaccion trx, Usuario[] usuariosArray) {
 
