@@ -8,7 +8,6 @@ public class Heap<T extends Comparable<T>> {
     private ArrayList<Par> heap;                    // Lista que almacena los elementos del heap
     private ArrayList<Handle> listaHandle;          // Lista de handles para acceso O(1) a ID Usuario
 
-
     /**
      * Clase interna para manejar los elementos del heap.
      * Almacena el valor y el índice del elemento en el heap.
@@ -43,8 +42,6 @@ public class Heap<T extends Comparable<T>> {
         }
     }
 
-    // 
-
     /**
      * Constructor que crea un heap a partir de una lista de elementos.
      * Utiliza el algoritmo de Floyd para construcción en tiempo lineal.
@@ -55,7 +52,7 @@ public class Heap<T extends Comparable<T>> {
         int n = elementos.size();
         this.heap = new ArrayList<>(n);
         
-        // Recorrido 1: Encontrar maxId mientras copiamos elementos - O(n)
+        // Inicializar el heap y la lista de handles
         this.listaHandle = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             listaHandle.add(new Handle(i));
@@ -63,9 +60,7 @@ public class Heap<T extends Comparable<T>> {
         }
 
         // Construir el heap usando el algoritmo de Floyd - O(n)
-        for (int i = heap.size() / 2 - 1; i >= 0; i--) {
-            heapifyDown(i);
-        }
+        construirHeap();
     }
 
     /**
@@ -134,9 +129,7 @@ public class Heap<T extends Comparable<T>> {
             
             // Actualizar índices si son Usuarios
             listaHandle.get(padre.getIndice()).setIndice(indice);
-            
             listaHandle.get(elemento.getIndice()).setIndice(indicePadre);
-            
             
             indice = indicePadre;
         }
