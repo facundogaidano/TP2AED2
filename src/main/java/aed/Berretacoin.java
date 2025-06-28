@@ -19,14 +19,17 @@ public class Berretacoin {
     public Berretacoin(int n_usuarios){
         // Array de usuarios indexado desde 1.
         this.usuariosArray = new Usuario[n_usuarios + 1]; 
-        this.usuarios = new Heap<>(n_usuarios);
+        this.usuarios = new Heap<>(n_usuarios); // O(P)
 
-        // Inicializar todos los usuarios con balance cero - O(P)
-        for (int i = 0; i < n_usuarios; i++) {
+        // Inicializar todos los usuarios - O(P)
+        for (int i = 0; i < n_usuarios; i++) { // O(P)
             Usuario user = new Usuario(i + 1);
             usuariosArray[i + 1] = user;
-            usuarios.agregar(user, user.getId());
+            usuarios.agregar(user, user.getId()); // O(1)
         }
+
+        // Construir el heap de usuarios - O(P)
+        usuarios.construirHeap(); // O(P)
     }
 
     /**

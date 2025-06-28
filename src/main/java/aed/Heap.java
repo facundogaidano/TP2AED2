@@ -5,8 +5,8 @@ import java.util.ArrayList;
  * Implementación de un heap máximo genérico.
  */
 public class Heap<T extends Comparable<T>> {
-    private ArrayList<Par> heap;                  // Lista que almacena los elementos del heap
-    private ArrayList<Handle> listaHandle;      // Lista de handles para acceso O(1) a ID Usuario
+    private ArrayList<Par> heap;                    // Lista que almacena los elementos del heap
+    private ArrayList<Handle> listaHandle;          // Lista de handles para acceso O(1) a ID Usuario
 
 
     /**
@@ -33,7 +33,7 @@ public class Heap<T extends Comparable<T>> {
 
     /**
      * Constructor que inicializa un heap vacío con la capacidad especificada.
-     * Complejidad: O(1)
+     * Complejidad: O(n)
      */
     public Heap(int capacidadInicial) {
         heap = new ArrayList<>(capacidadInicial);
@@ -75,13 +75,18 @@ public class Heap<T extends Comparable<T>> {
     public void agregar(T elemento, int handleId) {
         int indiceEnHeap = heap.size();
         heap.add(new Par(elemento, handleId));
-        
-        // Asegurar que listaHandle tenga capacidad
-        while (listaHandle.size() <= handleId) {
-            listaHandle.add(new Handle(-1));
-        }
         listaHandle.get(handleId).setIndice(indiceEnHeap);
-        heapifyUp(indiceEnHeap);
+    }
+
+    /**
+     * Construye el heap a partir de los elementos actuales.
+     * Complejidad: O(n)
+    */
+    public void construirHeap() {
+        // Construir el heap usando el algoritmo de Floyd - O(n)
+        for (int i = heap.size() / 2 - 1; i >= 0; i--) {
+            heapifyDown(i);
+        }
     }
     
     /**
